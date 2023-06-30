@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, TextField } from "@mui/material";
 import Title from "./Title";
 import { useCalcVM } from "./vm";
 import { CalcProps } from "./types";
@@ -15,6 +15,7 @@ export default function Calc(props: CalcProps) {
   return (
     <Box>
       <Title title={vm.recipe.title} onChange={vm.setTitle} />
+      <TextField label="Quantity" type="number" value={vm.recipe.quantity} onChange={(e) => vm.scaleQuantity(Number(e.target.value))} />
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>
       <RecipePropertiesDisplay properties={vm.properties} />

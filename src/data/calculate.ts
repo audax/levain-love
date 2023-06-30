@@ -1,20 +1,6 @@
-import { IngredientType, Recipe, RecipeProperties, SectionType } from "./recipe"
+import { IngredientType, Recipe, RecipeProperties, Section } from "./recipe"
+import {produce} from 'immer'
 
-const exampleRecipe: Recipe = {
-  title: 'Example',
-  sections: [
-    { 
-      name: 'dough',
-      type: SectionType.dough,
-      key: 'default',
-      ingredients: [
-        { name: 'flour', weight: 100, pct: 100, type: IngredientType.flour },
-        { name: 'water', weight: 60, pct: 60, type: IngredientType.fluid },
-        { name: 'salt', weight: 1.6, pct: 1.6, type: IngredientType.salt }
-      ]
-    }
-  ]
-}
 export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
   const { sections } = recipe;
   const { flour, fluid, salt, weight } = sections.reduce((acc, section) => {
@@ -43,4 +29,17 @@ export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
     fluidWeight,
     saltWeight
   }
+}
+
+export function scaleRecipe(recipe: Recipe, quantity: number): Recipe {
+  return produce(recipe, draft => {
+    const factor = quantity / recipe.quantity
+    draft.quantity = quantity
+    draft.sections.forEach(section => {
+      section.ingredients.forEach(ingredient => {
+        ingredient.weight *= factor
+      })
+    })
+    return draft
+  })
 }

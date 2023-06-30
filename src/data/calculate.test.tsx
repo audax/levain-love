@@ -1,5 +1,6 @@
-import { calculateRecipeProperties } from "@/data/calculate";
+import { calculateRecipeProperties, scaleRecipe } from "@/data/calculate";
 import { IngredientType, Recipe, RecipeProperties, SectionType, emptyRecipe } from "@/data/recipe";
+import { defaultRecipe, scaledRecipe } from "./_fixtures";
 
 const simpleRecipe: Recipe = {
   ...emptyRecipe,
@@ -7,42 +8,49 @@ const simpleRecipe: Recipe = {
     {
       name: "preferment",
       type: SectionType.preferment,
-      key: 'foobar',
+      key: "foobar",
       ingredients: [
-        { name: "flour", key: 'a', weight: 20, pct: 100, type: IngredientType.flour },
-        { name: "water", key: 'b', weight: 10, pct: 50, type: IngredientType.fluid },
-      ]
+        { name: "flour", key: "a", weight: 20, pct: 100, type: IngredientType.flour },
+        { name: "water", key: "b", weight: 10, pct: 50, type: IngredientType.fluid },
+      ],
     },
     {
       name: "dough",
       type: SectionType.dough,
-      key: 'default',
+      key: "default",
       ingredients: [
-        { name: "flour", key: 'a', weight: 100, pct: 100, type: IngredientType.flour },
-        { name: "water", key: 'b', weight: 50, pct: 50, type: IngredientType.fluid },
-        { name: "salt",  key: 'c', weight: 2, pct: 2, type: IngredientType.salt}
+        { name: "flour", key: "a", weight: 100, pct: 100, type: IngredientType.flour },
+        { name: "water", key: "b", weight: 50, pct: 50, type: IngredientType.fluid },
+        { name: "salt", key: "c", weight: 2, pct: 2, type: IngredientType.salt },
       ],
     },
   ],
 };
-describe("calculate", () => {
-  it("handles empty recipes", () => {
-    const expected: RecipeProperties = {
-      hydration: 0,
-      weight: 0,
-      flourWeight: 0,
-      fluidWeight: 0,
-      saltWeight: 0
-    }
-    expect(calculateRecipeProperties(emptyRecipe)).toEqual(expected);
-  });
+describe("calculations", () => {
+  describe("properties", () => {
+    it("handles empty recipes", () => {
+      const expected: RecipeProperties = {
+        hydration: 0,
+        weight: 0,
+        flourWeight: 0,
+        fluidWeight: 0,
+        saltWeight: 0,
+      };
+      expect(calculateRecipeProperties(emptyRecipe)).toEqual(expected);
+    });
 
-  it("calculates flour, water, salt", () => {
-    const properties = calculateRecipeProperties(simpleRecipe);
-    expect(properties.hydration).toEqual(50);
-    expect(properties.weight).toEqual(182);
-    expect(properties.flourWeight).toEqual(120);
-    expect(properties.fluidWeight).toEqual(60);
-    expect(properties.saltWeight).toEqual(2);
+    it("calculates flour, water, salt", () => {
+      const properties = calculateRecipeProperties(simpleRecipe);
+      expect(properties.hydration).toEqual(50);
+      expect(properties.weight).toEqual(182);
+      expect(properties.flourWeight).toEqual(120);
+      expect(properties.fluidWeight).toEqual(60);
+      expect(properties.saltWeight).toEqual(2);
+    });
   });
+  describe('scaling', () => {
+    it('scales a recipe', () => {
+      expect(scaleRecipe(defaultRecipe, 2)).toEqual(scaledRecipe)
+    })
+  })
 });

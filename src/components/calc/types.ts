@@ -12,4 +12,6 @@ export interface CalcVM {
   setTitle: (title: string) => void;
   addSection: () => void;
   properties: RecipeProperties
+  setQuantity: (quantity: number) => void;
+  scaleQuantity: (quantity: number) => void;
 }

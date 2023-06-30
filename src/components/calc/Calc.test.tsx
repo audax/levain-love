@@ -20,7 +20,7 @@ jest.mock('./vm', () => ({
 }))
  
 import Calc from '@/components/calc/Calc'
-import { defaultRecipe } from './_fixtures'
+import { defaultRecipe } from '../../data/_fixtures'
 
 describe('Calc', () => {
   const change = jest.fn()

@@ -2,6 +2,8 @@ import { renderHook } from "@testing-library/react";
 import { useCalcVM } from "./vm";
 import { SectionType, emptyRecipe } from "@/data/recipe";
 import { act } from "react-dom/test-utils";
+import exp from "constants";
+import { defaultRecipe, scaledRecipe } from "../../data/_fixtures";
 
 describe("calc vm", () => {
   it("starts with the initial recipe", () => {
@@ -21,6 +23,27 @@ describe("calc vm", () => {
 
     expect(onChange).toHaveBeenCalledWith({ ...emptyRecipe, title: 'test' })
     expect(result.current.recipe.title).toBe('test')
+  })
+  it('updates the quantity', () => {
+    const onChange = jest.fn()
+    const { result } = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange }))
+
+    act(() => {
+      result.current.setQuantity(100)
+    })
+
+    expect(onChange).toHaveBeenCalledWith({ ...emptyRecipe, quantity: 100})
+    expect(result.current.recipe.quantity).toBe(100)
+  })
+
+  it('scales the quantity', () => {
+    const onChange = jest.fn()
+    const { result } = renderHook(() => useCalcVM({ initialRecipe: defaultRecipe, onChange }))
+    act(() => {
+      result.current.scaleQuantity(2)
+    })
+
+    expect(onChange).toHaveBeenCalledWith(scaledRecipe)
   })
   it('adds a section', () => {
     const { result } = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange: () => {} }))

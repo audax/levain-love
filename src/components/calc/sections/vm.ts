@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import { Ingredient, IngredientType, Section, SectionType } from "@/data/recipe";
@@ -52,6 +52,10 @@ function buildIngredient(type: IngredientType): Ingredient {
 export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderVM {
   const { initialSection, onChange } = props;
   const [section, setSection] = useState(initialSection);
+  useEffect(() => {
+    console.log('use effect', initialSection)
+    setSection(initialSection)
+  }, [initialSection])
   const update = (changed: Section) => {
     onChange(changed);
     setSection(changed);

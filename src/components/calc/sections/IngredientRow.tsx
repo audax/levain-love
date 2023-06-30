@@ -13,6 +13,9 @@ interface IngredientRowProps {
 export default function IngredientRow(props: IngredientRowProps) {
   const { ingredient, onChange, initialEditMode } = props;
   const [row, setRow] = React.useState(ingredient);
+  React.useEffect(() => {
+    setRow(ingredient)
+  }, [ingredient])
   const [editMode, setEditMode] = React.useState(initialEditMode);
 
   const commitEdit = () => {

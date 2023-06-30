@@ -29,6 +29,7 @@ export interface Section {
 
 export interface Recipe {
   title: string
+  quantity: number
   sections: Section[]
 }
 
@@ -42,6 +43,7 @@ export interface RecipeProperties {
 
 export const emptyRecipe: Recipe = {
   title: '',
+  quantity: 1,
   sections: [
     {
       name: 'Dough',
