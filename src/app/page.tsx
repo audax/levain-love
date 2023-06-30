@@ -1,3 +1,6 @@
-export default function Home() {
-  return (<h1>Levain love</h1>)
+import * as React from 'react';
+import Home from '@/layouts/Home/Home'
+
+export default function RootPage() {
+  return <Home />;
 }

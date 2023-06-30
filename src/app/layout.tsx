@@ -1,21 +1,17 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import * as React from 'react';
+import ThemeRegistry from '@/components/Theme/ThemeRegistry/ThemeRegistry';
 
 export const metadata = {
-  title: 'Levain Love',
-  description: 'Baking sourdough bread with love and precision',
-}
+  title: 'Next App with MUI5',
+  description: 'next app with mui5',
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <ThemeRegistry>{children}</ThemeRegistry>
+      </body>
     </html>
-  )
+  );
 }
