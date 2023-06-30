@@ -2,8 +2,8 @@ import * as React from 'react';
 import ThemeRegistry from '@/components/Theme/ThemeRegistry/ThemeRegistry';
 
 export const metadata = {
-  title: 'Next App with MUI5',
-  description: 'next app with mui5',
+  title: 'Levain Love',
+  description: 'Love your levain, bake good bread',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

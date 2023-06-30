@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Copyright from '@/components/CopyRight/Copyright';
 import Link from 'next/link';
+import Calc from '@/components/calc/Calc';
+import { emptyRecipe } from '@/data/recipe';
 
 export default function Home() {
   return (
@@ -22,6 +24,7 @@ export default function Home() {
         <Typography variant="h4" component="h1" gutterBottom>
           Levain love
         </Typography>
+        <Calc initialRecipe={emptyRecipe} onChange={() => {}} /> 
         <Link href="/about">Go to the about page</Link>
         <Copyright />
       </Box>
