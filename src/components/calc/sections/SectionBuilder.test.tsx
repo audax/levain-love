@@ -1,0 +1,127 @@
+import { fireEvent, render, screen, within } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import userEvent from "@testing-library/user-event";
+import { IngredientType, Section, SectionType } from "@/data/recipe";
+import { SectionBuilderProps, SectionBuilderVM } from "./types";
+
+const exampleSection: Section = {
+  name: "dough",
+  type: SectionType.dough,
+  key: "default",
+  ingredients: [
+    { name: "flour", key: "a", weight: 100, pct: 100, type: IngredientType.flour },
+    { name: "water", key: "b", weight: 50, pct: 50, type: IngredientType.fluid },
+    { name: "salt", key: "c", weight: 2, pct: 2, type: IngredientType.salt },
+  ],
+};
+
+const vm: SectionBuilderVM = {
+  section: exampleSection,
+  setName: function (name: string) {
+    this.section.name = name;
+  },
+  setType: jest.fn(),
+  updateIngredient: jest.fn(),
+  removeIngredient: jest.fn(),
+  addIngredient: jest.fn(),
+};
+
+const props: SectionBuilderProps = {
+  initialSection: exampleSection,
+  onChange: jest.fn(),
+};
+
+const VM_SPY = jest.fn((props: SectionBuilderProps) => vm);
+jest.mock("./vm", () => ({
+  useSectionBuilderVm: (props: SectionBuilderProps) => VM_SPY(props),
+}));
+
+import SectionBuilder from "./SectionBuilder";
+
+describe("SectionBuilder", () => {
+  it("renders a section", () => {
+    render(<SectionBuilder {...props} />);
+    expect(screen.getByText("dough")).toBeInTheDocument();
+    expect(screen.getAllByDisplayValue("flour").length).toBeGreaterThan(0);
+    expect(screen.getAllByDisplayValue("water").length).toBeGreaterThan(0);
+    expect(screen.getAllByDisplayValue("salt").length).toBeGreaterThan(0);
+  });
+
+  it("adds an ingredient", async () => {
+    render(<SectionBuilder {...props} />);
+    const button = screen.getByTestId("add-flour");
+    await userEvent.click(button);
+
+    expect(vm.addIngredient).toHaveBeenCalledWith(IngredientType.flour);
+  });
+
+  it("removes an ingredient", async () => {
+    render(<SectionBuilder {...props} />);
+    const deleteButtons = screen.getAllByRole("button", {
+      name: /delete ingredient/i,
+    });
+    await userEvent.click(deleteButtons[0]);
+
+    expect(vm.removeIngredient).toHaveBeenCalledWith(exampleSection.ingredients[0]);
+
+    jest.mocked(vm.removeIngredient).mockClear();
+
+    await userEvent.click(deleteButtons[1]);
+    expect(vm.removeIngredient).toHaveBeenCalledWith(exampleSection.ingredients[1]);
+  });
+
+  describe("updates", () => {
+    const update = async (ingredientIndex: number, label: string, value: string) => {
+      const editButtons = screen.getAllByRole("button", {
+        name: /edit ingredient/i,
+      });
+      await userEvent.click(editButtons[ingredientIndex]);
+      const ingredientName = screen.getAllByLabelText(label);
+      await userEvent.clear(ingredientName[ingredientIndex]);
+      await userEvent.type(ingredientName[ingredientIndex], value);
+
+      const saveButton = screen.getByRole("button", {
+        name: /save ingredient/i,
+      });
+      await fireEvent.click(saveButton);
+    }
+    it("updates an ingredient name", async () => {
+      const spy = jest.spyOn(vm, "updateIngredient");
+      render(<SectionBuilder {...props} />);
+
+      await update(0, "Name", "new name");
+
+      expect(spy).toHaveBeenCalledWith({ ...exampleSection.ingredients[0], name: "new name" });
+    });
+
+    it("updates an ingredient weight", async () => {
+      const spy = jest.spyOn(vm, "updateIngredient");
+      render(<SectionBuilder {...props} />);
+
+      await update(0, "Weight", "1001");
+
+      expect(spy).toHaveBeenCalledWith({ ...exampleSection.ingredients[0], weight: 1001 });
+    });
+    it("updates an ingredient type", async () => {
+      const spy = jest.spyOn(vm, "updateIngredient");
+      render(<SectionBuilder {...props} />);
+
+      const editButtons = screen.getAllByRole("button", {
+        name: /edit ingredient/i,
+      });
+      await userEvent.click(editButtons[0]);
+      const ingredientName = screen.getAllByLabelText("Type");
+      await fireEvent.mouseDown(ingredientName[0]);
+      const listbox = within(screen.getByRole("listbox"));
+
+      await userEvent.click(listbox.getByText(/fluid/i));
+
+      const saveButton = screen.getByRole("button", {
+        name: /save ingredient/i,
+      });
+      await fireEvent.click(saveButton);
+
+      expect(spy).toHaveBeenCalledWith({ ...exampleSection.ingredients[0], weight: 1001 });
+    });
+  });
+});

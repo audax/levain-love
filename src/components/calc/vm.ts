@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Recipe, Section, SectionType } from "@/data/recipe";
 import { CalcProps, CalcVM } from "./types";
 import { calculateRecipeProperties } from "@/data/calculate";
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from 'uuid';
 
 function buildSection(): Section {
   return {
     name: 'New Section',
-    key: randomUUID(),
+    key: uuidv4(),
     type: SectionType.dough,
     ingredients: []
   }
@@ -21,7 +21,6 @@ export function useCalcVM(props: CalcProps): CalcVM {
     setRecipe(changed);
     onChange(changed);
   }
-
   return {
     recipe,
     properties: calculateRecipeProperties(recipe),

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RecipeProperties } from '../../data/recipe';
-import { Box, Stack, TextField } from '@mui/material';
+import { Paper, Stack, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 
 interface RecipePropertiesDisplayProps {
   properties: RecipeProperties
@@ -8,18 +8,29 @@ interface RecipePropertiesDisplayProps {
 export default function RecipePropertiesDisplay(props: RecipePropertiesDisplayProps) {
   const { properties } = props
   return (
-    <Stack component="form"
-      noValidate
-      autoComplete="off"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-      }}
-    >
-      <TextField value={properties.hydration} label="Hydration" />
-      <TextField value={properties.weight} label="Weight" />
-      <TextField value={properties.flourWeight} label="Flour weight" /> 
-      <TextField value={properties.fluidWeight} label="Fluid weight" /> 
-      <TextField value={properties.saltWeight} label="Salt weight" />
-    </Stack>
+    <TableContainer >
+    <TableBody>
+      <TableRow>
+        <TableCell>Hydration</TableCell>
+        <TableCell>{properties.hydration}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Total weight</TableCell>
+        <TableCell>{properties.weight}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Flour weight</TableCell>
+        <TableCell>{properties.flourWeight}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Fluid weight</TableCell>
+        <TableCell>{properties.fluidWeight}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Salt weight</TableCell>
+        <TableCell>{properties.saltWeight}</TableCell>
+      </TableRow>
+    </TableBody>
+    </TableContainer>
   );
 }

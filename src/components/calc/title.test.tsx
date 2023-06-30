@@ -9,7 +9,7 @@ const defaultRecipe: Recipe = {
   title: 'Test Recipe',
 }
  
-describe('Calc', () => {
+describe('Title', () => {
   it('renders a title', () => {
     render(<Title title="Test Recipe" onChange={() => {}}/>)
     expect(screen.getByLabelText(/Recipe name/i)).toHaveValue('Test Recipe')

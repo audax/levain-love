@@ -22,7 +22,7 @@ export default function Home() {
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
-          Levain love
+          Breader than most!
         </Typography>
         <Calc initialRecipe={emptyRecipe} onChange={() => {}} /> 
         <Link href="/about">Go to the about page</Link>

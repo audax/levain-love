@@ -9,8 +9,8 @@ const simpleRecipe: Recipe = {
       type: SectionType.preferment,
       key: 'foobar',
       ingredients: [
-        { name: "flour", weight: 20, pct: 100, type: IngredientType.flour },
-        { name: "water", weight: 10, pct: 50, type: IngredientType.fluid },
+        { name: "flour", key: 'a', weight: 20, pct: 100, type: IngredientType.flour },
+        { name: "water", key: 'b', weight: 10, pct: 50, type: IngredientType.fluid },
       ]
     },
     {
@@ -18,9 +18,9 @@ const simpleRecipe: Recipe = {
       type: SectionType.dough,
       key: 'default',
       ingredients: [
-        { name: "flour", weight: 100, pct: 100, type: IngredientType.flour },
-        { name: "water", weight: 50, pct: 50, type: IngredientType.fluid },
-        { name: "salt", weight: 2, pct: 2, type: IngredientType.salt}
+        { name: "flour", key: 'a', weight: 100, pct: 100, type: IngredientType.flour },
+        { name: "water", key: 'b', weight: 50, pct: 50, type: IngredientType.fluid },
+        { name: "salt",  key: 'c', weight: 2, pct: 2, type: IngredientType.salt}
       ],
     },
   ],

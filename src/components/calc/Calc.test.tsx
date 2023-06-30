@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 import { IngredientType, Recipe, SectionType, emptyRecipe } from '@/data/recipe'
@@ -14,8 +14,8 @@ const defaultRecipe: Recipe = {
       type: SectionType.preferment,
       key: 'foobar',
       ingredients: [
-        { name: "flour", weight: 20, pct: 100, type: IngredientType.flour },
-        { name: "water", weight: 10, pct: 50, type: IngredientType.fluid },
+        { name: "flour", key: 'a', weight: 20, pct: 100, type: IngredientType.flour },
+        { name: "water", key: 'b', weight: 10, pct: 50, type: IngredientType.fluid },
       ]
     },
     {
@@ -23,9 +23,9 @@ const defaultRecipe: Recipe = {
       type: SectionType.dough,
       key: 'default',
       ingredients: [
-        { name: "flour", weight: 100, pct: 100, type: IngredientType.flour },
-        { name: "water", weight: 50, pct: 50, type: IngredientType.fluid },
-        { name: "salt", weight: 2, pct: 2, type: IngredientType.salt}
+        { name: "flour", key: 'a', weight: 100, pct: 100, type: IngredientType.flour },
+        { name: "water", key: 'b', weight: 50, pct: 50, type: IngredientType.fluid },
+        { name: "salt",  key: 'c', weight: 2, pct: 2, type: IngredientType.salt}
       ],
     },
   ],
@@ -54,12 +54,17 @@ describe('Calc', () => {
     expect(VM_SPY).toHaveBeenCalledWith(
       { initialRecipe: defaultRecipe, onChange: change})
     expect(screen.getByDisplayValue('Test Recipe')).toBeInTheDocument()
-    expect(screen.getByLabelText('Recipe name')).toHaveValue('Test Recipe')
-    expect(screen.getByLabelText('Hydration')).toHaveValue('50')
-    expect(screen.getByLabelText('Weight')).toHaveValue('182')
-    expect(screen.getByLabelText('Flour weight')).toHaveValue('120') 
-    expect(screen.getByLabelText('Fluid weight')).toHaveValue('60')
-    expect(screen.getByLabelText('Salt weight')).toHaveValue('2')
+    const rows = screen.getAllByRole('row').map(row => within(row))
+    expect(rows[0].getByText('Hydration')).toBeInTheDocument()
+    expect(rows[0].getByText('50')).toBeInTheDocument()
+    expect(rows[1].getByText('Total weight')).toBeInTheDocument()
+    expect(rows[1].getByText('182')).toBeInTheDocument()
+    expect(rows[2].getByText('Flour weight')).toBeInTheDocument()
+    expect(rows[2].getByText('120')).toBeInTheDocument()
+    expect(rows[3].getByText('Fluid weight')).toBeInTheDocument() 
+    expect(rows[3].getByText('60')).toBeInTheDocument()
+    expect(rows[4].getByText('Salt weight')).toBeInTheDocument()
+    expect(rows[4].getByText('2')).toBeInTheDocument()  
   })
   it('changes the title', async () => {
     const change = jest.fn()
@@ -76,6 +81,12 @@ describe('Calc', () => {
     
     expect(vm.setTitle).toHaveBeenCalledWith('Test Recipe+')
   })
-  it('renders properties', () => {
+  it('adds sections', async () => {
+    render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
+    const button = screen.getByRole('button', {
+      name: /Add section/i
+    })
+    await userEvent.click(button)
+    expect(vm.addSection).toHaveBeenCalled()
   })
 })
