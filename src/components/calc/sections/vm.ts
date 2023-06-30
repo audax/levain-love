@@ -49,10 +49,6 @@ function buildIngredient(type: IngredientType): Ingredient {
   }
 }
 
-export interface EnrichedIngredient extends Ingredient {
-  isNew: boolean
-}
-
 export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderVM {
   const { initialSection, onChange } = props;
   const [section, setSection] = useState(initialSection);
