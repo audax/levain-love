@@ -47,7 +47,41 @@ describe("calculations", () => {
       expect(properties.fluidWeight).toEqual(60);
       expect(properties.saltWeight).toEqual(2);
     });
-    describe("with starter", () => {
+    describe("special cases", () => {
+      it("calculates hydration with a soaker", () => {
+        const recipe: Recipe = {
+          ...emptyRecipe,
+          sections: [
+            {
+              name: "soaker",
+              type: SectionType.soaker,
+              key: "soaker",
+              ingredients: [
+                { name: "raisins", key: "a", weight: 100, type: IngredientType.other },
+                { name: "water", key: "b", weight: 100, type: IngredientType.fluid },
+              ]
+            },
+            {
+              name: "dough",
+              type: SectionType.dough,
+              key: "default",
+              ingredients: [
+                { name: "flour", key: "a", weight: 100, type: IngredientType.flour },
+                { name: "water", key: "b", weight: 50, type: IngredientType.fluid },
+              ],
+            },
+          ],
+        }
+        const expected: RecipeProperties = {
+          weight: 350,
+          flourWeight: 100,
+          fluidWeight: 50,
+          saltWeight: 0,
+          hydration: 50,
+        }
+      const properties = calculateRecipeProperties(recipe);
+      expect(properties).toEqual(expected)
+      })
       it("calculates hydration with a starter", () => {
         const recipe: Recipe = {
           ...emptyRecipe,

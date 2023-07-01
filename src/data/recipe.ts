@@ -19,6 +19,8 @@ export interface Ingredient {
 export enum SectionType {
   preferment = 'preferment',
   dough = 'dough',
+  soaker = 'soaker',
+  other = 'other',
 }
 
 export interface Section {

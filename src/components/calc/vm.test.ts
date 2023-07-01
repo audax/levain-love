@@ -2,8 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { useCalcVM } from "./vm";
 import { SectionType, emptyRecipe } from "@/data/recipe";
 import { act } from "react-dom/test-utils";
-import exp from "constants";
-import { defaultRecipe, scaledRecipe } from "../../data/_fixtures";
+import { defaultRecipe, scaledRecipe, sourdoughConverted, sourdoughExample } from "../../data/_fixtures";
 
 describe("calc vm", () => {
   it("starts with the initial recipe", () => {
@@ -68,4 +67,23 @@ describe("calc vm", () => {
 
     expect(result.current.recipe.sections[0].name).toBe('test')
   })
+  it('loads a recipe', () => {
+    const { result } = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange: () => {} }))
+
+    act(() => {
+      result.current.loadRecipe(JSON.stringify(defaultRecipe))
+    })
+
+    expect(result.current.recipe).toEqual(defaultRecipe)
+  })
+  it('imports a recipe', () => {
+    const { result } = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange: () => {} }))
+
+    act(() => {
+      result.current.importRecipe(JSON.stringify(sourdoughExample))
+    })
+
+    expect(result.current.recipe).toEqual(sourdoughConverted)
+  })
+
 });

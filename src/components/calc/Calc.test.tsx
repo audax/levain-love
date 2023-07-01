@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 import { CalcProps, CalcVM } from '@/components/calc/types'
@@ -12,6 +12,9 @@ const vm: CalcVM = {
   removeSection: jest.fn(),
   addSection: jest.fn(),
   properties: calculateRecipeProperties(defaultRecipe),
+  setQuantity: jest.fn(),
+  scaleQuantity: jest.fn(),
+  loadRecipe: jest.fn()
 }
 
 const VM_SPY = jest.fn((props: CalcProps) => (vm))
@@ -21,6 +24,7 @@ jest.mock('./vm', () => ({
  
 import Calc from '@/components/calc/Calc'
 import { defaultRecipe } from '../../data/_fixtures'
+import { emptyRecipe } from '@/data/recipe'
 
 describe('Calc', () => {
   const change = jest.fn()
@@ -63,5 +67,40 @@ describe('Calc', () => {
     })
     await userEvent.click(button)
     expect(vm.addSection).toHaveBeenCalled()
+  })
+  it('exports the recipe', async () => {
+    render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
+
+    const exportString = screen.getByTestId('export').textContent ?? ''
+    expect(JSON.parse(exportString)).toEqual(defaultRecipe)
+  })
+  it('loads the recipe', async () => {
+    render(<Calc initialRecipe={emptyRecipe} onChange={change}/>)
+
+    const loadInput = screen.getByTestId('load')
+
+    await fireEvent.change(loadInput, {target: {value: JSON.stringify(defaultRecipe)} })
+
+    const button = screen.getByRole('button', {
+      name: /Load recipe/i
+    })
+    await userEvent.click(button)
+
+    expect(vm.loadRecipe).toHaveBeenCalledWith(JSON.stringify(defaultRecipe))
+  })
+  
+  it('imports a recipe', async () => {
+    render(<Calc initialRecipe={emptyRecipe} onChange={change}/>)
+
+    const loadInput = screen.getByTestId('import')
+
+    fireEvent.change(loadInput, {target: {value: JSON.stringify(defaultRecipe)} })
+
+    const button = screen.getByRole('button', {
+      name: /Load recipe/i
+    })
+    await userEvent.click(button)
+
+    expect(vm.loadRecipe).toHaveBeenCalledWith(JSON.stringify(defaultRecipe))
   })
 })

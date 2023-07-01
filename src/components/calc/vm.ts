@@ -3,6 +3,7 @@ import { Recipe, Section, SectionType } from "@/data/recipe";
 import { CalcProps, CalcVM } from "./types";
 import { calculateRecipeProperties, scaleRecipe } from "@/data/calculate";
 import { v4 as uuidv4 } from 'uuid';
+import { importRecipe } from "@/data/import";
 
 function buildSection(): Section {
   return {
@@ -35,6 +36,8 @@ export function useCalcVM(props: CalcProps): CalcVM {
     scaleQuantity,
     properties: calculateRecipeProperties(recipe),
     setTitle: (title: string) => update({ ...recipe, title }),
+    loadRecipe: (recipe: string) => {update(JSON.parse(recipe))},
+    importRecipe: (recipe: string) => {update(importRecipe(JSON.parse(recipe)))},
     addSection: () =>
       update({
         ...recipe,

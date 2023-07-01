@@ -1,5 +1,5 @@
-import { EnrichedIngredient, EnrichedSection, IngredientType, Recipe, RecipeProperties, Section } from "./recipe"
-import {produce} from 'immer'
+import { EnrichedIngredient, EnrichedSection, IngredientType, Recipe, RecipeProperties, Section, SectionType } from "./recipe";
+import { produce } from "immer";
 
 function calculateFlourAndWaterWeights(hydration: number, weight: number) {
   const flourWeight = weight / (1 + hydration / 100);
@@ -9,28 +9,31 @@ function calculateFlourAndWaterWeights(hydration: number, weight: number) {
 
 export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
   const { sections } = recipe;
-  const { flour, fluid, salt, weight } = sections.reduce((acc, section) => {
-    section.ingredients.forEach((ingredient) => {
-      acc.weight += ingredient.weight;
-      if (ingredient.type === IngredientType.flour) {
-        acc.flour += ingredient.weight;
-      } else if (ingredient.type === IngredientType.fluid) {
-        acc.fluid += ingredient.weight;
-      } else if (ingredient.type === IngredientType.salt) {
-        acc.salt += ingredient.weight;
-      } else if (ingredient.type === IngredientType.starter) {
-        const hydration = ingredient.hydration ?? 100;
-        const { flourWeight, fluidWeight } = calculateFlourAndWaterWeights(hydration, ingredient.weight);
-        acc.flour += flourWeight;
-        acc.fluid += fluidWeight;
-      }
-    });
-    return acc;
-  }, { flour: 0, fluid: 0, salt: 0, weight: 0 });
+  const { flour, fluid, salt, weight } = sections.reduce(
+    (acc, section) => {
+      section.ingredients.forEach((ingredient) => {
+        acc.weight += ingredient.weight;
+        if (ingredient.type === IngredientType.flour) {
+          acc.flour += ingredient.weight;
+        } else if (ingredient.type === IngredientType.fluid && section.type !== SectionType.soaker) {
+          acc.fluid += ingredient.weight;
+        } else if (ingredient.type === IngredientType.salt) {
+          acc.salt += ingredient.weight;
+        } else if (ingredient.type === IngredientType.starter) {
+          const hydration = ingredient.hydration ?? 100;
+          const { flourWeight, fluidWeight } = calculateFlourAndWaterWeights(hydration, ingredient.weight);
+          acc.flour += flourWeight;
+          acc.fluid += fluidWeight;
+        }
+      });
+      return acc;
+    },
+    { flour: 0, fluid: 0, salt: 0, weight: 0 }
+  );
 
   const hydration = flour === 0 ? 0 : (fluid / flour) * 100;
-  const flourWeight = flour
-  const fluidWeight = fluid
+  const flourWeight = flour;
+  const fluidWeight = fluid;
   const saltWeight = salt;
 
   return {
@@ -38,21 +41,21 @@ export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
     weight,
     flourWeight,
     fluidWeight,
-    saltWeight
-  }
+    saltWeight,
+  };
 }
 
 export function scaleRecipe(recipe: Recipe, quantity: number): Recipe {
-  return produce(recipe, draft => {
-    const factor = quantity / recipe.quantity
-    draft.quantity = quantity
-    draft.sections.forEach(section => {
-      section.ingredients.forEach(ingredient => {
-        ingredient.weight *= factor
-      })
-    })
-    return draft
-  })
+  return produce(recipe, (draft) => {
+    const factor = quantity / recipe.quantity;
+    draft.quantity = quantity;
+    draft.sections.forEach((section) => {
+      section.ingredients.forEach((ingredient) => {
+        ingredient.weight *= factor;
+      });
+    });
+    return draft;
+  });
 }
 
 export function enrichSection(section: Section): EnrichedSection {

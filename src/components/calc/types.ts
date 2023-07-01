@@ -6,6 +6,8 @@ export interface CalcProps {
 }
 
 export interface CalcVM {
+  importRecipe(arg0: string): unknown;
+  loadRecipe(value: string): void;
   updateSection(section: Section): void;
   removeSection(section: Section): void;
   recipe: Recipe;
