@@ -9,7 +9,6 @@ export enum IngredientType {
 export interface Ingredient {
   name: string;
   weight: number;
-  pct: number;
   type: IngredientType;
   key: string;
 }

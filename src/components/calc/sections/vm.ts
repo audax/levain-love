@@ -12,7 +12,6 @@ function buildIngredient(type: IngredientType): Ingredient {
         key: uuidv4(),
         type: IngredientType.flour,
         weight: 0,
-        pct: 0,
       };
     case IngredientType.fluid:
       return {

@@ -10,7 +10,7 @@ export default function Copyright() {
       <Link color="inherit" href="https://daxbau.net/">
         Jens Kadenbach
       </Link>
-      2022.
+      2023.
     </Typography>
   );
 }

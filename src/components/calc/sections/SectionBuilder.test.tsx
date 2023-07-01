@@ -29,12 +29,12 @@ import SectionBuilder from "./SectionBuilder";
 import { exampleSection } from "./_fixtures";
 
 describe("SectionBuilder", () => {
-  it("renders a section", () => {
+  it("renders a section in read only mode", () => {
     render(<SectionBuilder {...props} />);
     expect(screen.getByText("dough")).toBeInTheDocument();
-    expect(screen.getAllByDisplayValue("flour").length).toBeGreaterThan(0);
-    expect(screen.getAllByDisplayValue("water").length).toBeGreaterThan(0);
-    expect(screen.getAllByDisplayValue("salt").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("flour-ingredient").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("water-ingredient").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("salt-ingredient").length).toBeGreaterThan(0);
   });
 
   it("adds an ingredient", async () => {
@@ -73,7 +73,7 @@ describe("SectionBuilder", () => {
       const saveButton = screen.getByRole("button", {
         name: /save ingredient/i,
       });
-      await fireEvent.click(saveButton);
+      fireEvent.click(saveButton);
     }
     it("updates an ingredient name", async () => {
       const spy = jest.spyOn(vm, "updateIngredient");
