@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Ingredient, IngredientType, Section, SectionType } from "@/data/recipe";
 import { SectionBuilderProps, SectionBuilderVM } from "./types";
+import { enrichSection } from "@/data/calculate";
 
 function buildIngredient(type: IngredientType): Ingredient {
   switch (type) {
@@ -19,7 +20,6 @@ function buildIngredient(type: IngredientType): Ingredient {
         key: uuidv4(),
         type: IngredientType.fluid,
         weight: 0,
-        pct: 0,
       };
     case IngredientType.salt:
       return {
@@ -27,7 +27,6 @@ function buildIngredient(type: IngredientType): Ingredient {
         key: uuidv4(),
         type: IngredientType.salt,
         weight: 0,
-        pct: 0,
       };
     case IngredientType.yeast:
       return {
@@ -35,7 +34,6 @@ function buildIngredient(type: IngredientType): Ingredient {
         key: uuidv4(),
         type: IngredientType.yeast,
         weight: 0,
-        pct: 0,
       };
     case IngredientType.other:
       return {
@@ -43,7 +41,6 @@ function buildIngredient(type: IngredientType): Ingredient {
         key: uuidv4(),
         type: IngredientType.other,
         weight: 0,
-        pct: 0,
       };
   }
 }
@@ -60,8 +57,10 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
     setSection(changed);
   };
 
+  const enrichedSection = enrichSection(section);
+
   return {
-    section,
+    section: enrichedSection,
     setName: (name: string) => update({ ...section, name }),
     setType: (type: SectionType) => update({ ...section, type }),
     addIngredient: (type: IngredientType) => {

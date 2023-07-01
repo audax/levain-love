@@ -1,13 +1,5 @@
-import { Ingredient, IngredientType, Section, SectionType } from "@/data/recipe";
+import { EnrichedSection, Ingredient, IngredientType, Section, SectionType } from "@/data/recipe";
 
-
-export interface EnrichedIngredient extends Ingredient {
-  isNew?: boolean
-}
-
-export interface EnrichedSection extends Section {
-  ingredients: EnrichedIngredient[]
-}
 
 export interface SectionBuilderVM {
   section: EnrichedSection;

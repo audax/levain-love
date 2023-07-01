@@ -2,6 +2,7 @@ import * as React from "react";
 import { Ingredient, IngredientType } from "../../../data/recipe";
 import { IconButton, InputAdornment, MenuItem, Paper, Stack, TextField, styled } from "@mui/material";
 import { Cancel, Delete, Edit, Save } from "@mui/icons-material";
+import { EnrichedIngredient } from "./types";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -13,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 interface IngredientRowProps {
-  ingredient: Ingredient;
+  ingredient: EnrichedIngredient;
   onChange: (ingredient: Ingredient) => void;
   onDelete: () => void;
   initialEditMode: boolean;
@@ -28,15 +29,13 @@ export default function IngredientRow(props: IngredientRowProps) {
   const [editMode, setEditMode] = React.useState(initialEditMode);
 
   const commitEdit = () => {
-    onChange(row);
     setEditMode(false);
+    onChange(row);
   };
   const cancelEdit = () => {
     setRow(ingredient);
     setEditMode(false);
   };
-
-  const readOnly = !editMode;
 
   const items: IngredientType[] = [];
   for (const type in IngredientType) {
@@ -48,6 +47,7 @@ export default function IngredientRow(props: IngredientRowProps) {
       <Stack direction={"row"}>
         <Item>{ingredient.name}</Item>
         <Item>{ingredient.weight}g</Item>
+        <Item>{ingredient.pct}%</Item>
         <Item>{ingredient.type}</Item>
         <Item>
           <IconButton aria-label="edit ingredient" onClick={() => setEditMode(true)}>
@@ -65,7 +65,7 @@ export default function IngredientRow(props: IngredientRowProps) {
 
   return (
     <Stack direction={"row"}>
-      <TextField sx={{ m: 1, width: "25ch" }} value={row.name} label="Name" onChange={(e) => setRow({ ...ingredient, name: e.target.value })} />
+      <TextField sx={{ m: 1, width: "25ch" }} value={row.name} label="Name" onChange={(e) => setRow({ ...row, name: e.target.value })} />
       <TextField
         value={row.weight}
         sx={{ m: 1, width: "25ch" }}
@@ -74,14 +74,14 @@ export default function IngredientRow(props: IngredientRowProps) {
           startAdornment: <InputAdornment position="start">g</InputAdornment>,
         }}
         label="Weight"
-        onChange={(e) => setRow({ ...ingredient, weight: Number(e.target.value) })}
+        onChange={(e) => setRow({ ...row, weight: Number(e.target.value) })}
       />
       <TextField
         select
         value={row.type}
         sx={{ m: 1, width: "25ch" }}
         label="Type"
-        onChange={(e) => setRow({ ...ingredient, type: e.target.value as IngredientType })}
+        onChange={(e) => setRow({ ...row, type: e.target.value as IngredientType })}
       >
         {items.map((item) => (
           <MenuItem key={item} value={item}>

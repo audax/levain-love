@@ -52,3 +52,13 @@ export const emptyRecipe: Recipe = {
     }
   ]
 }
+
+
+export interface EnrichedIngredient extends Ingredient {
+  pct: number
+  isNew?: boolean
+}
+
+export interface EnrichedSection extends Section {
+  ingredients: EnrichedIngredient[]
+}

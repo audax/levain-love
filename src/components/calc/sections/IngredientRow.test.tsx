@@ -1,14 +1,15 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { Ingredient, IngredientType } from "@/data/recipe";
+import { EnrichedIngredient, IngredientType } from "@/data/recipe";
 import IngredientRow from "./IngredientRow";
 
-const exampleIngredient: Ingredient = {
+const exampleIngredient: EnrichedIngredient = {
   key: "flour",
   type: IngredientType.flour,
   weight: 100,
   name: "flour ingredient",
+  pct: 99,
 };
 
 const commonProps = {
@@ -25,6 +26,7 @@ describe("IngredientRow", () => {
       expect(screen.getByText("flour ingredient")).toBeInTheDocument();
       expect(screen.getByText("100g")).toBeInTheDocument();
       expect(screen.getByText("flour")).toBeInTheDocument();
+      expect(screen.getByText("99%")).toBeInTheDocument();
     });
     it("reacts to prop changes", () => {
       const { rerender } = render(<IngredientRow {...commonProps} />);
@@ -62,6 +64,27 @@ describe("IngredientRow", () => {
 
       const saveButton = screen.queryByRole("button", { name: /save ingredient/i });
       expect(saveButton).toBeInTheDocument();
+
+    })
+
+    it('edits multiple fields at once', async () => {
+      render(<IngredientRow {...commonProps} initialEditMode={true} />);
+
+      const nameField = screen.getByLabelText('Name');
+      await userEvent.clear(nameField);
+      await userEvent.type(nameField, 'new name');
+      
+      const weightField = screen.getByLabelText('Weight');
+      await userEvent.clear(weightField);
+      await userEvent.type(weightField, '210');
+
+
+      const saveButton = screen.getByRole("button", { name: /save ingredient/i });
+      await userEvent.click(saveButton);
+
+      expect(commonProps.onChange).toHaveBeenCalledWith({
+        ...exampleIngredient, name: 'new name', weight: 210
+      })
 
     })
   })

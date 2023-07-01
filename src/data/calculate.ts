@@ -1,4 +1,4 @@
-import { IngredientType, Recipe, RecipeProperties, Section } from "./recipe"
+import { EnrichedIngredient, EnrichedSection, IngredientType, Recipe, RecipeProperties, Section } from "./recipe"
 import {produce} from 'immer'
 
 export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
@@ -42,4 +42,28 @@ export function scaleRecipe(recipe: Recipe, quantity: number): Recipe {
     })
     return draft
   })
+}
+
+export function enrichSection(section: Section): EnrichedSection {
+  // the sum of all flour ingredients weights is 100%
+  // each other ingredients weight is a percentage of the total flour weight
+  const flourWeight = section.ingredients.reduce((acc, ingredient) => {
+    if (ingredient.type === IngredientType.flour) {
+      acc += ingredient.weight;
+    }
+    return acc;
+  }, 0);
+
+  const enrichedIngredients: EnrichedIngredient[] = section.ingredients.map((ingredient) => {
+    const pct = flourWeight === 0 ? 0 : (ingredient.weight / flourWeight) * 100;
+    return {
+      ...ingredient,
+      pct,
+    };
+  });
+
+  return {
+    ...section,
+    ingredients: enrichedIngredients,
+  };
 }
