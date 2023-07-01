@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Ingredient, IngredientType, Section, SectionType } from "@/data/recipe";
 import { SectionBuilderProps, SectionBuilderVM } from "./types";
 import { enrichSection } from "@/data/calculate";
+import { set } from "lodash";
 
 function buildIngredient(type: IngredientType): Ingredient {
   switch (type) {
@@ -54,8 +55,11 @@ function buildIngredient(type: IngredientType): Ingredient {
 }
 
 export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderVM {
-  const { initialSection, onChange } = props;
-  const [section, setSection] = useState(initialSection);
+  const { initialSection, onChange } = props
+  const [section, setSection] = useState(initialSection)
+  const [editMode, setEditMode] = useState(false)
+  const [name, setName] = useState(initialSection.name)
+  const [type, setType] = useState(initialSection.type)
   useEffect(() => {
     setSection(initialSection)
   }, [initialSection])
@@ -68,8 +72,22 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
 
   return {
     section: enrichedSection,
-    setName: (name: string) => update({ ...section, name }),
-    setType: (type: SectionType) => update({ ...section, type }),
+    editMode,
+    type,
+    name,
+    startEdit: () => setEditMode(true),
+    cancelEdit: () => {
+      setEditMode(false)
+      setName(section.name)
+      setType(section.type)
+    },
+    commitEdit: () => {
+      if (!editMode) return;
+      update({...section, name, type})
+      setEditMode(false)
+    },
+    setName,
+    setType,
     addIngredient: (type: IngredientType) => {
       const ingredient = buildIngredient(type);
       update({

@@ -1,7 +1,7 @@
 import { IngredientType, Section, SectionType } from "@/data/recipe";
 
 export const emptySection: Section = {
-  name: "dough",
+  name: "dough-section",
   type: SectionType.dough,
   key: "default",
   ingredients: [

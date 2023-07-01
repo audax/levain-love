@@ -14,18 +14,49 @@ describe('section vm', () => {
   afterEach(() => {
     jest.mocked(commonProps.onChange).mockClear()
   })
-
-  it('exposes setters for section name and type', () => {
+  it('exposes state and setters for edit mode', () => {
+    const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
+    expect(result.current.editMode).toBe(false)
+    act(() => {
+      result.current.startEdit()
+    })
+    expect(result.current.editMode).toBe(true)
+  })
+  it('cancels edit mode', () => {
     const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
     act(() => {
-      result.current.setName('test')
+      result.current.startEdit()
+      result.current.setName('new name')
+      result.current.setType(SectionType.preferment)
+      result.current.cancelEdit()
     })
-    expect(commonProps.onChange).toHaveBeenCalledWith({ ...exampleSection, name: 'test' })
-    jest.mocked(commonProps.onChange).mockClear()
+    expect(result.current.editMode).toBe(false)
+    expect(result.current.name).toBe('dough-section')
+    expect(result.current.type).toBe(SectionType.dough)
+    expect(commonProps.onChange).not.toHaveBeenCalled()
+  })
+  it('commits from edit mode', () => {
+    const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
     act(() => {
+      result.current.startEdit()
+    })
+    act(() => {
+      result.current.setName('new name')
       result.current.setType(SectionType.preferment)
     })
-    expect(commonProps.onChange).toHaveBeenCalledWith({ ...exampleSection, name: 'test', type: SectionType.preferment })
+    act(() => {
+      result.current.commitEdit()
+    })
+    expect(result.current.name).toBe('new name')
+    expect(result.current.type).toBe(SectionType.preferment)
+    expect(result.current.editMode).toBe(false)
+    expect(commonProps.onChange).toHaveBeenCalledWith({ ...exampleSection, name: 'new name', type: SectionType.preferment })
+  })
+
+  it('exposes state for section name and type', () => {
+    const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
+    expect(result.current.name).toBe('dough-section')
+    expect(result.current.type).toBe(SectionType.dough)
   })
 
   it('enriches ingredients with pct', () => {

@@ -3,7 +3,7 @@ import { SectionBuilderProps } from "./types";
 import { useSectionBuilderVm } from "./vm";
 import IngredientRow from "./IngredientRow";
 import { Button, Stack } from "@mui/material";
-import { IngredientType } from "@/data/recipe";
+import { IngredientType, SectionType } from "@/data/recipe";
 
 export default function SectionBuilder(props: SectionBuilderProps) {
   const vm = useSectionBuilderVm(props);
@@ -20,9 +20,14 @@ export default function SectionBuilder(props: SectionBuilderProps) {
     );
   });
 
+  const items: SectionType[] = [];
+  for (const type in SectionType) {
+    items.push(SectionType[type as keyof typeof SectionType]);
+  }
   return (
     <div>
       <h2>{vm.section.name}</h2>
+      <h3>{vm.section.type}</h3>
       <Button onClick={() => vm.addIngredient(IngredientType.flour)}>flour</Button>
       <Button onClick={() => vm.addIngredient(IngredientType.fluid)}>fluid</Button>
       <Button onClick={() => vm.addIngredient(IngredientType.salt)}>salt</Button>

@@ -2,6 +2,12 @@ import { EnrichedSection, Ingredient, IngredientType, Section, SectionType } fro
 
 
 export interface SectionBuilderVM {
+  commitEdit(): void;
+  type: SectionType;
+  name: string
+  cancelEdit(): void;
+  editMode: boolean;
+  startEdit(): void;
   section: EnrichedSection;
   setName: (name: string) => void;
   setType: (type: SectionType) => void;

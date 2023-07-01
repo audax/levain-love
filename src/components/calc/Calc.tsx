@@ -25,7 +25,7 @@ export default function Calc(props: CalcProps) {
       <TextareaAutosize data-testid="load" ref={loadRef} />
       <Button onClick={() => loadRef.current && vm.loadRecipe(loadRef.current.value)}>Load recipe</Button>
       <TextareaAutosize data-testid="import" ref={importRef} />
-      <Button onClick={() => importRef.current && vm.loadRecipe(importRef.current.value)}>Import recipe</Button>
+      <Button onClick={() => importRef.current && vm.importRecipe(importRef.current.value)}>Import recipe</Button>
     </Box>
   );
 }

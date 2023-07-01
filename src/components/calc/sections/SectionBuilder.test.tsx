@@ -1,20 +1,28 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { IngredientType } from "@/data/recipe";
+import { IngredientType, SectionType } from "@/data/recipe";
 import { SectionBuilderProps, SectionBuilderVM } from "./types";
 
 const enrichedExample = enrichSection(exampleSection)
 
 const vm: SectionBuilderVM = {
   section: enrichedExample,
-  setName: function (name: string) {
-    this.section.name = name;
-  },
+  setName: jest.fn(),
   setType: jest.fn(),
   updateIngredient: jest.fn(),
   removeIngredient: jest.fn(),
   addIngredient: jest.fn(),
+  commitEdit: jest.fn(),
+  type: enrichedExample.type,
+  name: enrichedExample.name,
+  cancelEdit: function (): void {
+    throw new Error("Function not implemented.");
+  },
+  editMode: false,
+  startEdit: function (): void {
+    throw new Error("Function not implemented.");
+  }
 };
 
 const props: SectionBuilderProps = {
@@ -32,7 +40,7 @@ import { exampleSection } from "./_fixtures";
 import { enrichSection } from "@/data/calculate";
 
 describe("SectionBuilder", () => {
-  it("renders a section in read only mode", () => {
+  it("renders a section", () => {
     render(<SectionBuilder {...props} />);
     expect(screen.getByText("dough")).toBeInTheDocument();
     expect(screen.getAllByText("flour-ingredient").length).toBeGreaterThan(0);

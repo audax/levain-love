@@ -1,8 +1,7 @@
 import * as React from "react";
-import { Ingredient, IngredientType } from "../../../data/recipe";
+import { EnrichedIngredient, Ingredient, IngredientType } from "@/data/recipe";
 import { IconButton, InputAdornment, MenuItem, Paper, Stack, TextField, styled } from "@mui/material";
 import { Cancel, Delete, Edit, Save } from "@mui/icons-material";
-import { EnrichedIngredient } from "./types";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",

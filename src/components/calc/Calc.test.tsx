@@ -14,7 +14,8 @@ const vm: CalcVM = {
   properties: calculateRecipeProperties(defaultRecipe),
   setQuantity: jest.fn(),
   scaleQuantity: jest.fn(),
-  loadRecipe: jest.fn()
+  loadRecipe: jest.fn(),
+  importRecipe: jest.fn()
 }
 
 const VM_SPY = jest.fn((props: CalcProps) => (vm))
@@ -46,7 +47,6 @@ describe('Calc', () => {
     expect(rows[4].getByText('2')).toBeInTheDocument()  
   })
   it('changes the title', async () => {
-    const change = jest.fn()
     render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
     expect(VM_SPY).toHaveBeenCalledWith(
       { initialRecipe: defaultRecipe, onChange: change})
@@ -79,14 +79,14 @@ describe('Calc', () => {
 
     const loadInput = screen.getByTestId('load')
 
-    await fireEvent.change(loadInput, {target: {value: JSON.stringify(defaultRecipe)} })
+    await fireEvent.change(loadInput, {target: {value: 'recipe'} })
 
     const button = screen.getByRole('button', {
       name: /Load recipe/i
     })
     await userEvent.click(button)
 
-    expect(vm.loadRecipe).toHaveBeenCalledWith(JSON.stringify(defaultRecipe))
+    expect(vm.loadRecipe).toHaveBeenCalledWith('recipe')
   })
   
   it('imports a recipe', async () => {
@@ -94,13 +94,13 @@ describe('Calc', () => {
 
     const loadInput = screen.getByTestId('import')
 
-    fireEvent.change(loadInput, {target: {value: JSON.stringify(defaultRecipe)} })
+    fireEvent.change(loadInput, {target: {value: 'import recipe'} })
 
     const button = screen.getByRole('button', {
-      name: /Load recipe/i
+      name: /Import recipe/i
     })
     await userEvent.click(button)
 
-    expect(vm.loadRecipe).toHaveBeenCalledWith(JSON.stringify(defaultRecipe))
+    expect(vm.importRecipe).toHaveBeenCalledWith('import recipe')
   })
 })
