@@ -4,6 +4,7 @@ export enum IngredientType {
   salt = 'salt',
   yeast = 'yeast',
   other = 'other',
+  starter = 'starter',
 }
 
 export interface Ingredient {
@@ -11,6 +12,7 @@ export interface Ingredient {
   weight: number;
   type: IngredientType;
   key: string;
+  hydration?: number;
 }
 
 

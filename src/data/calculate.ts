@@ -1,6 +1,12 @@
 import { EnrichedIngredient, EnrichedSection, IngredientType, Recipe, RecipeProperties, Section } from "./recipe"
 import {produce} from 'immer'
 
+function calculateFlourAndWaterWeights(hydration: number, weight: number) {
+  const flourWeight = weight / (1 + hydration / 100);
+  const fluidWeight = weight - flourWeight;
+  return { flourWeight, fluidWeight };
+}
+
 export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
   const { sections } = recipe;
   const { flour, fluid, salt, weight } = sections.reduce((acc, section) => {
@@ -12,6 +18,11 @@ export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
         acc.fluid += ingredient.weight;
       } else if (ingredient.type === IngredientType.salt) {
         acc.salt += ingredient.weight;
+      } else if (ingredient.type === IngredientType.starter) {
+        const hydration = ingredient.hydration ?? 100;
+        const { flourWeight, fluidWeight } = calculateFlourAndWaterWeights(hydration, ingredient.weight);
+        acc.flour += flourWeight;
+        acc.fluid += fluidWeight;
       }
     });
     return acc;

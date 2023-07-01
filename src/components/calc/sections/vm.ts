@@ -42,6 +42,14 @@ function buildIngredient(type: IngredientType): Ingredient {
         type: IngredientType.other,
         weight: 0,
       };
+    case IngredientType.starter:
+      return {
+        name: "Starter",
+        key: uuidv4(),
+        type: IngredientType.starter,
+        weight: 0,
+        hydration: 100
+      };
   }
 }
 
@@ -49,7 +57,6 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
   const { initialSection, onChange } = props;
   const [section, setSection] = useState(initialSection);
   useEffect(() => {
-    console.log('use effect', initialSection)
     setSection(initialSection)
   }, [initialSection])
   const update = (changed: Section) => {

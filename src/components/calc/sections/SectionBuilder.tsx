@@ -23,10 +23,11 @@ export default function SectionBuilder(props: SectionBuilderProps) {
   return (
     <div>
       <h2>{vm.section.name}</h2>
-      <Button data-testid="add-flour" onClick={() => vm.addIngredient(IngredientType.flour)}>flour</Button>
-      <Button data-testid="add-fluid" onClick={() => vm.addIngredient(IngredientType.fluid)}>fluid</Button>
+      <Button onClick={() => vm.addIngredient(IngredientType.flour)}>flour</Button>
+      <Button onClick={() => vm.addIngredient(IngredientType.fluid)}>fluid</Button>
       <Button onClick={() => vm.addIngredient(IngredientType.salt)}>salt</Button>
       <Button onClick={() => vm.addIngredient(IngredientType.yeast)}>yeast</Button>
+      <Button onClick={() => vm.addIngredient(IngredientType.starter)}>starter</Button>
       <Button onClick={() => vm.addIngredient(IngredientType.other)}>other</Button>
       <Stack>{...ingredientRows}</Stack>
     </div>
