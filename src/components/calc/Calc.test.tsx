@@ -18,13 +18,13 @@ const vm: CalcVM = {
   importRecipe: jest.fn()
 }
 
-const VM_SPY = jest.fn((props: CalcProps) => (vm))
+const VM_SPY = jest.fn((_: CalcProps) => (vm))
 jest.mock('./vm', () => ({
   useCalcVM: (props: CalcProps) => VM_SPY(props)
 }))
- 
+
 import Calc from '@/components/calc/Calc'
-import { defaultRecipe } from '../../data/_fixtures'
+import { defaultRecipe } from '@/data/_fixtures'
 import { emptyRecipe } from '@/data/recipe'
 
 describe('Calc', () => {
@@ -41,10 +41,10 @@ describe('Calc', () => {
     expect(rows[1].getByText('182')).toBeInTheDocument()
     expect(rows[2].getByText('Flour weight')).toBeInTheDocument()
     expect(rows[2].getByText('120')).toBeInTheDocument()
-    expect(rows[3].getByText('Fluid weight')).toBeInTheDocument() 
+    expect(rows[3].getByText('Fluid weight')).toBeInTheDocument()
     expect(rows[3].getByText('60')).toBeInTheDocument()
     expect(rows[4].getByText('Salt weight')).toBeInTheDocument()
-    expect(rows[4].getByText('2')).toBeInTheDocument()  
+    expect(rows[4].getByText('2')).toBeInTheDocument()
   })
   it('changes the title', async () => {
     render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
@@ -57,7 +57,7 @@ describe('Calc', () => {
 
     jest.mocked(vm.setTitle).mockClear()
     await userEvent.type(input, '+')
-    
+
     expect(vm.setTitle).toHaveBeenCalledWith('Test Recipe+')
   })
   it('adds sections', async () => {
@@ -79,7 +79,7 @@ describe('Calc', () => {
 
     const loadInput = screen.getByTestId('load')
 
-    await fireEvent.change(loadInput, {target: {value: 'recipe'} })
+    fireEvent.change(loadInput, {target: {value: 'recipe'} })
 
     const button = screen.getByRole('button', {
       name: /Load recipe/i
@@ -88,7 +88,7 @@ describe('Calc', () => {
 
     expect(vm.loadRecipe).toHaveBeenCalledWith('recipe')
   })
-  
+
   it('imports a recipe', async () => {
     render(<Calc initialRecipe={emptyRecipe} onChange={change}/>)
 

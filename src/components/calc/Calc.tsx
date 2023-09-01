@@ -12,7 +12,7 @@ export default function Calc(props: CalcProps) {
   const importRef = React.useRef<HTMLTextAreaElement>(null)
 
   const sections = vm.recipe.sections.map((section) => (
-    <SectionBuilder key={section.key} initialSection={section} onChange={(section) => vm.updateSection(section)} />
+    <SectionBuilder key={section.key} initialSection={section} onChange={vm.updateSection} />
   ));
   return (
     <Box>
@@ -21,7 +21,7 @@ export default function Calc(props: CalcProps) {
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>
       <RecipePropertiesDisplay properties={vm.properties} />
-      <TextareaAutosize data-testid="export" value={JSON.stringify(vm.recipe, null, 2)} /> 
+      <TextareaAutosize data-testid="export" value={JSON.stringify(vm.recipe, null, 2)} />
       <TextareaAutosize data-testid="load" ref={loadRef} />
       <Button onClick={() => loadRef.current && vm.loadRecipe(loadRef.current.value)}>Load recipe</Button>
       <TextareaAutosize data-testid="import" ref={importRef} />

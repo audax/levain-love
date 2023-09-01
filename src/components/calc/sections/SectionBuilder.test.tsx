@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { IngredientType, SectionType } from "@/data/recipe";
+import { IngredientType } from "@/data/recipe";
 import { SectionBuilderProps, SectionBuilderVM } from "./types";
 
 const enrichedExample = enrichSection(exampleSection)
@@ -30,13 +30,13 @@ const props: SectionBuilderProps = {
   onChange: jest.fn(),
 };
 
-const VM_SPY = jest.fn((props: SectionBuilderProps) => vm);
+const VM_SPY = jest.fn((_: SectionBuilderProps) => vm);
 jest.mock("./vm", () => ({
   useSectionBuilderVm: (props: SectionBuilderProps) => VM_SPY(props),
 }));
 
 import SectionBuilder from "./SectionBuilder";
-import { exampleSection } from "./_fixtures";
+import {emptySection, exampleSection} from "./_fixtures";
 import { enrichSection } from "@/data/calculate";
 
 describe("SectionBuilder", () => {
@@ -94,7 +94,7 @@ describe("SectionBuilder", () => {
 
     it("updates an ingredient name", async () => {
       const spy = jest.spyOn(vm, "updateIngredient");
-      render(<SectionBuilder {...props} />);
+      render(<SectionBuilder {...props} initialSection={emptySection} />);
 
       await update(0, "Name", "new name");
 

@@ -7,10 +7,18 @@ import Typography from '@mui/material/Typography';
 import Copyright from '@/components/CopyRight/Copyright';
 import Link from 'next/link';
 import Calc from '@/components/calc/Calc';
-import { emptyRecipe } from '@/data/recipe';
+import {emptyRecipe} from '@/data/recipe';
+import {useQueryState} from 'next-usequerystate/app';
+
+import {load, save} from "@/data/persistence";
 
 export default function Home() {
-  return (
+  const [recipe, setRecipe] = useQueryState('recipe', {
+      parse: load,
+      serialize: save
+  });
+  // noinspection HtmlUnknownTarget
+    return (
     <Container maxWidth="lg">
       <Box
         sx={{
@@ -24,7 +32,7 @@ export default function Home() {
         <Typography variant="h4" component="h1" gutterBottom>
           Breader than most!
         </Typography>
-        <Calc initialRecipe={emptyRecipe} onChange={() => {}} /> 
+        <Calc initialRecipe={recipe ?? emptyRecipe} onChange={setRecipe} />
         <Link href="/about">Go to the about page</Link>
         <Copyright />
       </Box>
