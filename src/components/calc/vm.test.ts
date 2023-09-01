@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { useCalcVM } from "./vm";
 import { SectionType, emptyRecipe } from "@/data/recipe";
 import { act } from "react-dom/test-utils";
-import { defaultRecipe, scaledRecipe, sourdoughConverted, sourdoughExample } from "../../data/_fixtures";
+import { defaultRecipe, scaledRecipe, sourdoughConverted, sourdoughExample } from "@/data/_fixtures";
 
 describe("calc vm", () => {
   it("starts with the initial recipe", () => {
@@ -58,7 +58,7 @@ describe("calc vm", () => {
     })
     expect(result.current.recipe.sections.length).toBe(0)
   })
-  it('updates a section', () => { 
+  it('updates a section', () => {
     const { result } = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange: () => {} }))
 
     act(() => {

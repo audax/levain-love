@@ -24,9 +24,9 @@ describe("IngredientRow", () => {
     it("renders an ingredient read only", () => {
       render(<IngredientRow {...commonProps} />);
       expect(screen.getByText("flour ingredient")).toBeInTheDocument();
-      expect(screen.getByText("100g")).toBeInTheDocument();
+      expect(screen.getByText("100")).toBeInTheDocument();
       expect(screen.getByText("flour")).toBeInTheDocument();
-      expect(screen.getByText("99%")).toBeInTheDocument();
+      expect(screen.getByText("99.00")).toBeInTheDocument();
     });
     it("reacts to prop changes", () => {
       const { rerender } = render(<IngredientRow {...commonProps} />);
@@ -73,7 +73,7 @@ describe("IngredientRow", () => {
       const nameField = screen.getByLabelText('Name');
       await userEvent.clear(nameField);
       await userEvent.type(nameField, 'new name');
-      
+
       const weightField = screen.getByLabelText('Weight');
       await userEvent.clear(weightField);
       await userEvent.type(weightField, '210');

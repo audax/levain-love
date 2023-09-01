@@ -1,100 +1,114 @@
 import * as React from "react";
-import { EnrichedIngredient, Ingredient, IngredientType } from "@/data/recipe";
-import { IconButton, InputAdornment, MenuItem, Paper, Stack, TextField, styled } from "@mui/material";
-import { Cancel, Delete, Edit, Save } from "@mui/icons-material";
+import {EnrichedIngredient, Ingredient, IngredientType} from "@/data/recipe";
+import {IconButton, InputAdornment, MenuItem, TextField, styled, TableRow, TableCell, ButtonGroup} from "@mui/material";
+import {Cancel, Delete, Edit, Save} from "@mui/icons-material";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  flexGrow: 1,
-}));
+const StyledTableCell = styled(TableCell)({
+    padding: 0,
+})
 
 interface IngredientRowProps {
-  ingredient: EnrichedIngredient;
-  onChange: (ingredient: Ingredient) => void;
-  onDelete: () => void;
-  initialEditMode: boolean;
+    ingredient: EnrichedIngredient;
+    onChange: (ingredient: Ingredient) => void;
+    onDelete: () => void;
+    initialEditMode: boolean;
 }
 
 export default function IngredientRow(props: IngredientRowProps) {
-  const { ingredient, onChange, initialEditMode } = props;
-  const [row, setRow] = React.useState(ingredient);
-  React.useEffect(() => {
-    setRow(ingredient);
-  }, [ingredient]);
-  const [editMode, setEditMode] = React.useState(initialEditMode);
+    const {ingredient, onChange, initialEditMode} = props;
+    const [row, setRow] = React.useState(ingredient);
+    React.useEffect(() => {
+        setRow(ingredient);
+    }, [ingredient]);
+    const [editMode, setEditMode] = React.useState(initialEditMode);
 
-  const commitEdit = () => {
-    setEditMode(false);
-    onChange(row);
-  };
-  const cancelEdit = () => {
-    setRow(ingredient);
-    setEditMode(false);
-  };
+    const commitEdit = () => {
+        setEditMode(false);
+        onChange(row);
+    };
+    const cancelEdit = () => {
+        setRow(ingredient);
+        setEditMode(false);
+    };
 
-  const items: IngredientType[] = [];
-  for (const type in IngredientType) {
-    items.push(IngredientType[type as keyof typeof IngredientType]);
-  }
+    const items: IngredientType[] = [];
+    for (const type in IngredientType) {
+        items.push(IngredientType[type as keyof typeof IngredientType]);
+    }
 
-  if (!editMode) {
+    if (!editMode) {
+        return (
+            <TableRow
+
+            >
+                <StyledTableCell>{ingredient.name}</StyledTableCell>
+                <StyledTableCell align="right"><span>{ingredient.weight}</span>&nbsp;g</StyledTableCell>
+                <StyledTableCell align="right"><span>{ingredient.pct.toFixed(2)}</span>&nbsp;%</StyledTableCell>
+                <StyledTableCell align="right">{ingredient.type}</StyledTableCell>
+                <StyledTableCell align="right">
+                    <ButtonGroup variant="outlined">
+                        <IconButton size="small" aria-label="delete ingredient" onClick={props.onDelete}>
+                            <Delete/>
+                        </IconButton>
+                        <IconButton size="small" aria-label="edit ingredient" onClick={() => setEditMode(true)}>
+                            <Edit/>
+                        </IconButton>
+                    </ButtonGroup>
+                </StyledTableCell>
+            </TableRow>
+        )
+    }
+
     return (
-      <Stack direction={"row"}>
-        <Item>{ingredient.name}</Item>
-        <Item>{ingredient.weight}g</Item>
-        <Item>{ingredient.pct}%</Item>
-        <Item>{ingredient.type}</Item>
-        <Item>
-          <IconButton aria-label="edit ingredient" onClick={() => setEditMode(true)}>
-            <Edit />
-          </IconButton>
-        </Item>
-        <Item>
-          <IconButton aria-label="delete ingredient" onClick={props.onDelete}>
-            <Delete />
-          </IconButton>
-        </Item>
-      </Stack>
+        <>
+        <TableRow
+        >
+            <StyledTableCell colSpan={4}>
+                <TextField sx={{m: 1, width: "25ch"}} value={row.name} label="Name"
+                           onChange={(e) => setRow({...row, name: e.target.value})}/>
+            </StyledTableCell>
+            <StyledTableCell>
+                <ButtonGroup variant="outlined">
+
+                    <IconButton aria-label="save ingredient" onClick={commitEdit}>
+                        <Save/>
+                    </IconButton>
+                    <IconButton aria-label="cancel ingredient" onClick={cancelEdit}>
+                        <Cancel/>
+                    </IconButton>
+                </ButtonGroup>
+            </StyledTableCell>
+        </TableRow>
+            <TableRow>
+
+            <StyledTableCell colSpan={3}>
+                <TextField
+                    value={row.weight}
+                    sx={{m: 1, width: "15ch"}}
+                    type="Number"
+                    label="Weight"
+                    InputProps={{
+                        endAdornment: <InputAdornment position="end">g</InputAdornment>,
+                    }}
+                    onChange={(e) => setRow({...row, weight: Number(e.target.value)})}
+                />
+            </StyledTableCell>
+                <StyledTableCell colSpan={2}>
+                    <TextField
+                        select
+                        value={row.type}
+                        sx={{m: 1, width: "15ch"}}
+                        label="Type"
+                        onChange={(e) => setRow({...row, type: e.target.value as IngredientType})}
+                    >
+                        {items.map((item) => (
+                            <MenuItem key={item} value={item}>
+                                {item}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </StyledTableCell>
+        </TableRow>
+            </>
     );
-  }
-
-  return (
-    <Stack direction={"row"}>
-      <TextField sx={{ m: 1, width: "25ch" }} value={row.name} label="Name" onChange={(e) => setRow({ ...row, name: e.target.value })} />
-      <TextField
-        value={row.weight}
-        sx={{ m: 1, width: "25ch" }}
-        type="Number"
-        InputProps={{
-          startAdornment: <InputAdornment position="start">g</InputAdornment>,
-        }}
-        label="Weight"
-        onChange={(e) => setRow({ ...row, weight: Number(e.target.value) })}
-      />
-      <TextField
-        select
-        value={row.type}
-        sx={{ m: 1, width: "25ch" }}
-        label="Type"
-        onChange={(e) => setRow({ ...row, type: e.target.value as IngredientType })}
-      >
-        {items.map((item) => (
-          <MenuItem key={item} value={item}>
-            {item}
-          </MenuItem>
-        ))}
-      </TextField>
-
-      <IconButton aria-label="save ingredient" onClick={commitEdit}>
-        <Save />
-      </IconButton>
-      <IconButton aria-label="cancel ingredient" onClick={cancelEdit}>
-        <Cancel />
-      </IconButton>
-    </Stack>
-  );
 }

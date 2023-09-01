@@ -34,7 +34,8 @@ describe('Calc', () => {
     expect(VM_SPY).toHaveBeenCalledWith(
       { initialRecipe: defaultRecipe, onChange: change})
     expect(screen.getByDisplayValue('Test Recipe')).toBeInTheDocument()
-    const rows = screen.getAllByRole('row').map(row => within(row))
+    const rows = within(screen.getByTestId('recipe-properties'))
+        .getAllByRole('row').map(row => within(row))
     expect(rows[0].getByText('Hydration')).toBeInTheDocument()
     expect(rows[0].getByText('50')).toBeInTheDocument()
     expect(rows[1].getByText('Total weight')).toBeInTheDocument()

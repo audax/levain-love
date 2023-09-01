@@ -11,6 +11,7 @@ export default function Title(props: TitleProps) {
     <TextField
     label="Recipe name"
     value={title}
+    fullWidth={true}
     onChange={(e) => onChange(e.target.value)}
   />
   );

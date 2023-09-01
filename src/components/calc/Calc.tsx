@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Button, Stack, TextField, TextareaAutosize } from "@mui/material";
+import { Button, Stack, TextField, TextareaAutosize } from "@mui/material";
 import Title from "./Title";
 import { useCalcVM } from "./vm";
 import { CalcProps } from "./types";
@@ -15,9 +15,9 @@ export default function Calc(props: CalcProps) {
     <SectionBuilder key={section.key} initialSection={section} onChange={vm.updateSection} />
   ));
   return (
-    <Box>
+    <Stack>
       <Title title={vm.recipe.title} onChange={vm.setTitle} />
-      <TextField label="Quantity" type="number" value={vm.recipe.quantity} onChange={(e) => vm.scaleQuantity(Number(e.target.value))} />
+      <TextField label="Quantity" size="small" type="number" value={vm.recipe.quantity} onChange={(e) => vm.scaleQuantity(Number(e.target.value))} />
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>
       <RecipePropertiesDisplay properties={vm.properties} />
@@ -26,6 +26,6 @@ export default function Calc(props: CalcProps) {
       <Button onClick={() => loadRef.current && vm.loadRecipe(loadRef.current.value)}>Load recipe</Button>
       <TextareaAutosize data-testid="import" ref={importRef} />
       <Button onClick={() => importRef.current && vm.importRecipe(importRef.current.value)}>Import recipe</Button>
-    </Box>
+    </Stack>
   );
 }
