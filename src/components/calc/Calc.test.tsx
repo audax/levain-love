@@ -115,13 +115,21 @@ describe('Calc', () => {
 
     expect(vm.save).toHaveBeenCalled()
   })
-  it('updates the quantity', async () => {
+  it('updates the quantity on blur', async () => {
     render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
     const input = screen.getByLabelText('Quantity')
     await userEvent.clear(input)
     await userEvent.type(input, '10')
     expect(vm.scaleQuantity).not.toHaveBeenCalled()
     await userEvent.tab()
+    expect(vm.scaleQuantity).toHaveBeenCalledWith(10)
+  })
+  it('updates the quantity on enter', async () => {
+    render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
+    const input = screen.getByLabelText('Quantity')
+    expect(input).toHaveValue(1)
+    await userEvent.click(input)
+    await userEvent.keyboard('{backspace}10{enter}')
     expect(vm.scaleQuantity).toHaveBeenCalledWith(10)
   })
 })
