@@ -2,8 +2,10 @@
 
 import {migrate, sql} from "@/db/connection";
 import {emptyRecipe, Recipe} from "@/data/recipe";
+import {cache} from 'react';
 
-export async function loadRecipe(id: string | null): Promise<Recipe> {
+
+export const loadRecipe = cache(async (id: string | null): Promise<Recipe> => {
     try {
         const { rows } = await sql`SELECT data FROM recipes WHERE id=${id}`
         return rows[0].data as Recipe
@@ -16,7 +18,7 @@ export async function loadRecipe(id: string | null): Promise<Recipe> {
         }
     }
     return emptyRecipe
-}
+})
 
 export async function saveRecipe(recipe: Recipe): Promise<string> {
     try {

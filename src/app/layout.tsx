@@ -1,7 +1,9 @@
 import * as React from 'react';
 import ThemeRegistry from '@/components/Theme/ThemeRegistry/ThemeRegistry';
+import { Metadata } from 'next'
 
-export const metadata = {
+
+export const metadata: Metadata= {
   title: 'Levain Love',
   description: 'Love your levain, bake good bread',
 };
