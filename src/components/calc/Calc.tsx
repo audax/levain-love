@@ -23,7 +23,7 @@ export default function Calc(props: CalcProps) {
                         vm.setTitle(name)
                         vm.setQuantity(quantity)
                     }} scaleQuantity={vm.scaleQuantity}/>
-      <Button onClick={vm.save}>Save recipe</Button>
+      <Button disabled={!vm.modified} onClick={vm.save}>Save recipe</Button>
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>
       <RecipePropertiesDisplay properties={vm.properties} />

@@ -120,5 +120,14 @@ describe("calc vm", () => {
     // navigate to the new recipe page, the id is returned from the saveRecipe mock
     expect(pushMock).toHaveBeenCalledWith('/recipe/test')
   })
+  it('indicates a modified recipe', async () => {
+    const {result} = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange: () => {} }))
+    expect(result.current.modified).toBe(false)
+    act(() => {
+      result.current.setTitle('new title')
+    })
+    expect(result.current.modified).toBe(true)
+
+  })
 
 });

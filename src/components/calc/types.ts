@@ -17,4 +17,5 @@ export interface CalcVM {
   setQuantity: (quantity: number) => void;
   scaleQuantity: (quantity: number) => void;
   save(): Promise<void>;
+  modified: boolean
 }

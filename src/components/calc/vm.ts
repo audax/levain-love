@@ -21,9 +21,11 @@ export function useCalcVM(props: CalcProps): CalcVM {
   const { initialRecipe, onChange } = props;
   const [recipe, setRecipe] = useState(initialRecipe);
   const router = useRouter()
+  const [modified, setModified] = useState(false)
   const update = (changed: Recipe) => {
     onChange(changed);
     setRecipe(changed);
+    setModified(true)
   }
   const scaleQuantity = (quantity: number) => {
     if (quantity <= 0) { return }
@@ -44,6 +46,7 @@ export function useCalcVM(props: CalcProps): CalcVM {
     save,
     setQuantity,
     scaleQuantity,
+    modified,
     properties: calculateRecipeProperties(recipe),
     setTitle: (title: string) => update({ ...recipe, title }),
     loadRecipe: (recipe: string) => {update(load(recipe))},

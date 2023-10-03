@@ -17,6 +17,7 @@ const vm: CalcVM = {
   loadRecipe: jest.fn(),
   importRecipe: jest.fn(),
   save: jest.fn(),
+  modified: false
 }
 
 const VM_SPY = jest.fn((_: CalcProps) => (vm))
@@ -35,6 +36,7 @@ import { emptyRecipe } from '@/data/recipe'
 describe('Calc', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    vm.modified = false
   })
   const change = jest.fn()
   it('renders a recipe', () => {
@@ -55,6 +57,15 @@ describe('Calc', () => {
     expect(rows[4].getByText('Salt weight')).toBeInTheDocument()
     expect(rows[4].getByText('2')).toBeInTheDocument()
   })
+  it('renders a modified recipe', () => {
+    vm.modified = true
+    render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
+    expect(screen.getByText('Save recipe')).toBeEnabled()
+  })
+  it('renders an unmodified recipe', () => {
+    render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
+    expect(screen.getByText('Save recipe')).not.toBeEnabled()
+  })
   it('changes the title and quantity', async () => {
     render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
     expect(VM_SPY).toHaveBeenCalledWith(
@@ -71,7 +82,6 @@ describe('Calc', () => {
 
     expect(vm.setTitle).toHaveBeenCalledWith('New recipe name')
     expect(vm.setQuantity).toHaveBeenCalledWith(100)
-
   })
   it('adds sections', async () => {
     render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
@@ -129,6 +139,7 @@ describe('Calc', () => {
     })
   })
   it('saves a recipe', async () => {
+    vm.modified = true
     render(<Calc initialRecipe={emptyRecipe} onChange={change}/>)
 
     const button = screen.getByRole('button', {
