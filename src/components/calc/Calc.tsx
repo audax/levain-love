@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from "react";
 import { Button, Stack, TextField, TextareaAutosize } from "@mui/material";
 import Title from "./Title";

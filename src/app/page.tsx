@@ -1,6 +1,9 @@
+'use Server'
+
 import * as React from 'react';
-import Home from '@/layouts/Home/Home'
+import RecipeBuilder from "@/layouts/RecipeBuilder/RecipeBuilder";
+import {emptyRecipe} from "@/data/recipe";
 
 export default function RootPage() {
-  return <Home />;
+  return <RecipeBuilder recipe={ emptyRecipe }/>;
 }

@@ -1,23 +1,15 @@
-'use client';
-
+'use server'
 import * as React from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Copyright from '@/components/CopyRight/Copyright';
 import Link from 'next/link';
-import Calc from '@/components/calc/Calc';
-import {emptyRecipe} from '@/data/recipe';
-import {useQueryState} from 'next-usequerystate/app';
+import CalcWrapper from "@/components/calc/CalcWrapper";
+import {Recipe} from "@/data/recipe";
 
-import {load, save} from "@/data/persistence";
-
-export default function Home() {
-  const [recipe, setRecipe] = useQueryState('recipe', {
-      parse: load,
-      serialize: save
-  });
-  // noinspection HtmlUnknownTarget
+export default async function RecipeBuilder({ recipe }: { recipe: Recipe }) {
+    // noinspection HtmlUnknownTarget
     return (
     <Container maxWidth="lg">
       <Box
@@ -30,7 +22,7 @@ export default function Home() {
         <Typography variant="h4" component="h1" gutterBottom>
           Breader than most!
         </Typography>
-        <Calc initialRecipe={recipe ?? emptyRecipe} onChange={setRecipe} />
+        <CalcWrapper recipe={recipe} />
         <Link href="/about">Go to the about page</Link>
         <Copyright />
       </Box>
