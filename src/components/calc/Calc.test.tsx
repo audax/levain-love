@@ -31,7 +31,7 @@ jest.mock("material-ui-confirm", () => ({
 
 import Calc from '@/components/calc/Calc'
 import { defaultRecipe } from '@/data/_fixtures'
-import { emptyRecipe } from '@/data/recipe'
+import {emptyRecipe } from '@/data/recipe'
 
 describe('Calc', () => {
   beforeEach(() => {
@@ -50,12 +50,14 @@ describe('Calc', () => {
     expect(rows[0].getByText('50')).toBeInTheDocument()
     expect(rows[1].getByText('Total weight')).toBeInTheDocument()
     expect(rows[1].getByText('182')).toBeInTheDocument()
-    expect(rows[2].getByText('Flour weight')).toBeInTheDocument()
-    expect(rows[2].getByText('120')).toBeInTheDocument()
-    expect(rows[3].getByText('Fluid weight')).toBeInTheDocument()
-    expect(rows[3].getByText('60')).toBeInTheDocument()
-    expect(rows[4].getByText('Salt weight')).toBeInTheDocument()
-    expect(rows[4].getByText('2')).toBeInTheDocument()
+    expect(rows[2].getByText('Weight per item')).toBeInTheDocument()
+    expect(rows[2].getByText('182')).toBeInTheDocument()
+    expect(rows[3].getByText('Flour weight')).toBeInTheDocument()
+    expect(rows[3].getByText('120')).toBeInTheDocument()
+    expect(rows[4].getByText('Fluid weight')).toBeInTheDocument()
+    expect(rows[4].getByText('60')).toBeInTheDocument()
+    expect(rows[5].getByText('Salt weight')).toBeInTheDocument()
+    expect(rows[5].getByText('2')).toBeInTheDocument()
   })
   it('renders a modified recipe', () => {
     vm.modified = true

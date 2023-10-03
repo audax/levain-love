@@ -20,6 +20,10 @@ export default function RecipePropertiesDisplay(props: RecipePropertiesDisplayPr
             <TableCell>{properties.weight.toFixed(0)}</TableCell>
           </TableRow>
           <TableRow>
+            <TableCell>Weight per item</TableCell>
+            <TableCell>{properties.weightPerBread.toFixed(0)}</TableCell>
+          </TableRow>
+          <TableRow>
             <TableCell>Flour weight</TableCell>
             <TableCell>{properties.flourWeight.toFixed(0)}</TableCell>
           </TableRow>

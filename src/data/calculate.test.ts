@@ -4,6 +4,7 @@ import { defaultRecipe, scaledRecipe } from "./_fixtures";
 
 const simpleRecipe: Recipe = {
   ...emptyRecipe,
+  quantity: 2,
   sections: [
     {
       name: "preferment",
@@ -32,6 +33,7 @@ describe("calculations", () => {
       const expected: RecipeProperties = {
         hydration: 0,
         weight: 0,
+        weightPerBread: 0,
         flourWeight: 0,
         fluidWeight: 0,
         saltWeight: 0,
@@ -51,6 +53,7 @@ describe("calculations", () => {
       it("calculates hydration with a soaker", () => {
         const recipe: Recipe = {
           ...emptyRecipe,
+          quantity: 2,
           sections: [
             {
               name: "soaker",
@@ -74,6 +77,7 @@ describe("calculations", () => {
         }
         const expected: RecipeProperties = {
           weight: 350,
+          weightPerBread: 175,
           flourWeight: 100,
           fluidWeight: 50,
           saltWeight: 0,
@@ -85,6 +89,7 @@ describe("calculations", () => {
       it("calculates hydration with a starter", () => {
         const recipe: Recipe = {
           ...emptyRecipe,
+          quantity: 4,
           sections: [
             {
               name: "dough",
@@ -101,6 +106,7 @@ describe("calculations", () => {
         }
         const expected: RecipeProperties = {
           weight: 252,
+          weightPerBread: 252 / 4,
           flourWeight: 150,
           fluidWeight: 100,
           saltWeight: 2,

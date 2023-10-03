@@ -39,6 +39,7 @@ export interface Recipe {
 export interface RecipeProperties {
   hydration: number
   weight: number
+  weightPerBread: number
   flourWeight: number
   fluidWeight: number
   saltWeight: number

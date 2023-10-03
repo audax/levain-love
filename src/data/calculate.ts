@@ -32,6 +32,7 @@ export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
   );
 
   const hydration = flour === 0 ? 0 : (fluid / flour) * 100;
+  const weightPerBread = weight / recipe.quantity;
   const flourWeight = flour;
   const fluidWeight = fluid;
   const saltWeight = salt;
@@ -39,6 +40,7 @@ export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
   return {
     hydration,
     weight,
+    weightPerBread,
     flourWeight,
     fluidWeight,
     saltWeight,
