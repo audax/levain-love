@@ -47,7 +47,7 @@ export default function IngredientRow(props: IngredientRowProps) {
                 <StyledTableCell align="right">{ingredient.type}</StyledTableCell>
                 <StyledTableCell align="right">
                     <ButtonGroup variant="outlined">
-                        <IconButton size="small" aria-label="delete ingredient" onClick={props.onDelete}>
+                        <IconButton size="small" aria-label="remove ingredient" onClick={props.onDelete}>
                             <Delete/>
                         </IconButton>
                         <IconButton size="small" aria-label="edit ingredient" onClick={() => setEditMode(true)}>

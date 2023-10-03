@@ -15,7 +15,7 @@ export default function Calc(props: CalcProps) {
   const quantityRef = React.useRef<HTMLInputElement>(null)
 
   const sections = vm.recipe.sections.map((section) => (
-    <SectionBuilder key={section.key} initialSection={section} onChange={vm.updateSection} />
+    <SectionBuilder remove={vm.removeSection} key={section.key} initialSection={section} onChange={vm.updateSection} />
   ));
   return (
     <Stack>

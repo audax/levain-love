@@ -14,9 +14,11 @@ export interface SectionBuilderVM {
   addIngredient: (type: IngredientType) => Ingredient;
   removeIngredient: (ingredient: Ingredient) => void;
   updateIngredient: (ingredient: Ingredient) => void;
+  remove: () => void;
 }
 
 export interface SectionBuilderProps {
   initialSection: Section;
   onChange: (section: Section) => void;
+  remove: (section: Section) => void;
 }

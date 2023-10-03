@@ -22,12 +22,14 @@ const vm: SectionBuilderVM = {
   editMode: false,
   startEdit: function (): void {
     throw new Error("Function not implemented.");
-  }
+  },
+  remove: jest.fn()
 };
 
 const props: SectionBuilderProps = {
   initialSection: exampleSection,
   onChange: jest.fn(),
+  remove: jest.fn(),
 };
 
 const VM_SPY = jest.fn((_: SectionBuilderProps) => vm);
@@ -48,6 +50,14 @@ describe("SectionBuilder", () => {
     expect(screen.getAllByText("salt-ingredient").length).toBeGreaterThan(0);
   });
 
+  it("removes a section", async () => {
+    render(<SectionBuilder {...props} />);
+    const remove = screen.getByRole("button", { name: 'remove section' });
+    await userEvent.click(remove)
+
+    expect(vm.remove).toHaveBeenCalled()
+  })
+
   describe('adding ingredients', ()=>{
     Object.values(IngredientType).forEach((value) => {
       it(`adds ${value} ingredient`, async () => {
@@ -64,7 +74,7 @@ describe("SectionBuilder", () => {
   it("removes an ingredient", async () => {
     render(<SectionBuilder {...props} />);
     const deleteButtons = screen.getAllByRole("button", {
-      name: /delete ingredient/i,
+      name: /remove ingredient/i,
     });
     await userEvent.click(deleteButtons[0]);
 

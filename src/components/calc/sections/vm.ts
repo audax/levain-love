@@ -75,6 +75,7 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
     editMode,
     type,
     name,
+    remove: () => props.remove(section),
     startEdit: () => setEditMode(true),
     cancelEdit: () => {
       setEditMode(false)

@@ -70,6 +70,14 @@ describe('Calc', () => {
     await userEvent.click(button)
     expect(vm.addSection).toHaveBeenCalled()
   })
+  it('removes sections', async () => {
+    render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
+    const removeButtons = await screen.findAllByRole('button', {
+      name: /remove section/i
+    })
+    await userEvent.click(removeButtons[0])
+    expect(vm.removeSection).toHaveBeenCalledWith(defaultRecipe.sections[0])
+  })
   it('exports the recipe', async () => {
     render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
 

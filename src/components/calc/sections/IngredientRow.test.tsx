@@ -54,6 +54,15 @@ describe("IngredientRow", () => {
 
       expect(screen.getByRole("button", { name: /cancel ingredient/i })).toBeInTheDocument();
     });
+    it("removes the ingredient", async () => {
+      render(inTable(<IngredientRow {...commonProps} />));
+
+      const removeButton = screen.getByRole("button", { name: /remove ingredient/i });
+
+      await userEvent.click(removeButton);
+
+      expect(commonProps.onDelete).toHaveBeenCalled()
+    });
     it("does not switch to edit mode by prop change", () => {
       const { rerender } = render(inTable(<IngredientRow {...commonProps} />));
 

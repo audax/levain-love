@@ -8,6 +8,7 @@ import { act } from "react-dom/test-utils"
 const commonProps: SectionBuilderProps = {
   initialSection: exampleSection,
   onChange: jest.fn(),
+  remove: jest.fn()
 }
 
 describe('section vm', () => {
@@ -65,6 +66,16 @@ describe('section vm', () => {
     expect(result.current.section.ingredients[0].pct).toBe(100)
     expect(result.current.section.ingredients[1].pct).toBe(50)
     expect(result.current.section.ingredients[2].pct).toBe(2)
+  })
+
+  it('removes itself', () => {
+    const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
+    act(() => {
+      result.current.remove()
+    })
+
+    expect(commonProps.remove).toHaveBeenCalledWith(commonProps.initialSection)
+
   })
 
   describe('adds ingredients', () => {
