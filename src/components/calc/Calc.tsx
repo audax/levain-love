@@ -12,6 +12,7 @@ export default function Calc(props: CalcProps) {
   const vm = useCalcVM(props)
   const loadRef = React.useRef<HTMLTextAreaElement>(null)
   const importRef = React.useRef<HTMLTextAreaElement>(null)
+  const quantityRef = React.useRef<HTMLInputElement>(null)
 
   const sections = vm.recipe.sections.map((section) => (
     <SectionBuilder key={section.key} initialSection={section} onChange={vm.updateSection} />
@@ -19,7 +20,17 @@ export default function Calc(props: CalcProps) {
   return (
     <Stack>
       <Title title={vm.recipe.title} onChange={vm.setTitle} />
-      <TextField label="Quantity" size="small" type="number" defaultValue={vm.recipe.quantity} onBlur={(e) => vm.scaleQuantity(Number(e.target.value))} />
+      <TextField label="Quantity" size="small" type="number" defaultValue={vm.recipe.quantity}
+                 inputRef={quantityRef}
+                 onBlur={(e) => vm.scaleQuantity(Number(e.target.value))}
+                 onKeyDown={(e) => {
+                     if (e.key != 'Enter') return
+                     const value = quantityRef?.current?.value;
+                     if (value) {
+                         vm.scaleQuantity(Number(value))
+                     }
+                 }}
+      />
       <Button onClick={vm.save}>Save recipe</Button>
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>
