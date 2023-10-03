@@ -22,6 +22,7 @@ export default function IngredientRow(props: IngredientRowProps) {
     }, [ingredient]);
     const [editMode, setEditMode] = React.useState(initialEditMode);
 
+    const hasHydration = ingredient.type === IngredientType.starter
     const commitEdit = () => {
         setEditMode(false);
         onChange(row);
@@ -81,7 +82,7 @@ export default function IngredientRow(props: IngredientRowProps) {
         </TableRow>
             <TableRow>
 
-            <StyledTableCell colSpan={3}>
+            <StyledTableCell colSpan={hasHydration ? 2 : 3}>
                 <TextField
                     value={row.weight}
                     sx={{m: 1, width: "15ch"}}
@@ -93,7 +94,7 @@ export default function IngredientRow(props: IngredientRowProps) {
                     onChange={(e) => setRow({...row, weight: Number(e.target.value)})}
                 />
             </StyledTableCell>
-                <StyledTableCell colSpan={2}>
+                <StyledTableCell colSpan={hasHydration ? 1 : 2}>
                     <TextField
                         select
                         value={row.type}
@@ -108,6 +109,21 @@ export default function IngredientRow(props: IngredientRowProps) {
                         ))}
                     </TextField>
                 </StyledTableCell>
+                {hasHydration &&
+                    <StyledTableCell colSpan={hasHydration ? 1 : 2}>
+                        <TextField
+                        value={row.hydration}
+                        sx={{m: 1, width: "15ch"}}
+                        type="Number"
+                        label="Hydration"
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                        }}
+                        onChange={(e) =>
+                            setRow({...row, hydration: Number(e.target.value)})}
+                        />
+                    </StyledTableCell>
+                }
         </TableRow>
             </>
     );

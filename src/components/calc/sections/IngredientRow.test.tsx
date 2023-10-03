@@ -104,7 +104,26 @@ describe("IngredientRow", () => {
       expect(commonProps.onChange).toHaveBeenCalledWith({
         ...exampleIngredient, name: 'new name', weight: 210
       })
+    })
+    it('edits the hydration of starter', async () => {
+      const starterIngredient: EnrichedIngredient = {
+        key: "starter",
+        type: IngredientType.starter,
+        weight: 100,
+        name: "starter ingredient",
+        pct: 50,
+        hydration: 100,
+      };
+      render(inTable(<IngredientRow {...commonProps} ingredient={starterIngredient} initialEditMode={true} />));
+      const hydrationField = screen.getByLabelText('Hydration');
+      await userEvent.clear(hydrationField);
+      await userEvent.type(hydrationField, '50');
+      const saveButton = screen.getByRole("button", { name: /save ingredient/i });
+      await userEvent.click(saveButton);
 
+      expect(commonProps.onChange).toHaveBeenCalledWith({
+        ...starterIngredient, hydration: 50
+      })
     })
   })
 });
