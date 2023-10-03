@@ -5,6 +5,8 @@ import { calculateRecipeProperties, scaleRecipe } from "@/data/calculate";
 import { v4 as uuidv4 } from 'uuid';
 import { importRecipe } from "@/data/import";
 import {load} from "@/data/persistence";
+import {useRouter} from "next/navigation";
+import {saveRecipe} from "@/db/recipeDb";
 
 function buildSection(): Section {
   return {
@@ -18,6 +20,7 @@ function buildSection(): Section {
 export function useCalcVM(props: CalcProps): CalcVM {
   const { initialRecipe, onChange } = props;
   const [recipe, setRecipe] = useState(initialRecipe);
+  const router = useRouter()
   const update = (changed: Recipe) => {
     onChange(changed);
     setRecipe(changed);
@@ -31,8 +34,13 @@ export function useCalcVM(props: CalcProps): CalcVM {
       quantity
     })
   }
+  const save = async () => {
+    const id = await saveRecipe(recipe)
+    router.push(`/recipe/${id}`)
+  }
   return {
     recipe,
+    save,
     setQuantity,
     scaleQuantity,
     properties: calculateRecipeProperties(recipe),

@@ -1,4 +1,19 @@
 import { renderHook } from "@testing-library/react";
+
+const pushMock = jest.fn();
+
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      push: pushMock
+    };
+  },
+}));
+
+jest.mock("../../db/recipeDb", () => ({
+  saveRecipe: jest.fn(() => Promise.resolve("test"))
+}))
+
 import { useCalcVM } from "./vm";
 import { SectionType, emptyRecipe } from "@/data/recipe";
 import { act } from "react-dom/test-utils";
@@ -84,6 +99,17 @@ describe("calc vm", () => {
     })
 
     expect(result.current.recipe).toEqual(sourdoughConverted)
+  })
+  it('saves a recipe', async () => {
+    const {result} = renderHook(() => useCalcVM({
+      initialRecipe: emptyRecipe, onChange: () => {
+      }
+    }))
+    await act(async () => {
+      await result.current.save()
+    })
+    // navigate to the new recipe page, the id is returned from the saveRecipe mock
+    expect(pushMock).toHaveBeenCalledWith('/recipe/test')
   })
 
 });

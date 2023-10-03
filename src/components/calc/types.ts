@@ -16,4 +16,5 @@ export interface CalcVM {
   properties: RecipeProperties
   setQuantity: (quantity: number) => void;
   scaleQuantity: (quantity: number) => void;
+  save(): Promise<void>;
 }

@@ -15,7 +15,8 @@ const vm: CalcVM = {
   setQuantity: jest.fn(),
   scaleQuantity: jest.fn(),
   loadRecipe: jest.fn(),
-  importRecipe: jest.fn()
+  importRecipe: jest.fn(),
+  save: jest.fn(),
 }
 
 const VM_SPY = jest.fn((_: CalcProps) => (vm))
@@ -103,5 +104,15 @@ describe('Calc', () => {
     await userEvent.click(button)
 
     expect(vm.importRecipe).toHaveBeenCalledWith('import recipe')
+  })
+  it('saves a recipe', async () => {
+    render(<Calc initialRecipe={emptyRecipe} onChange={change}/>)
+
+    const button = screen.getByRole('button', {
+      name: /Save recipe/i
+    })
+    await userEvent.click(button)
+
+    expect(vm.save).toHaveBeenCalled()
   })
 })
