@@ -115,4 +115,13 @@ describe('Calc', () => {
 
     expect(vm.save).toHaveBeenCalled()
   })
+  it('updates the quantity', async () => {
+    render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
+    const input = screen.getByLabelText('Quantity')
+    await userEvent.clear(input)
+    await userEvent.type(input, '10')
+    expect(vm.scaleQuantity).not.toHaveBeenCalled()
+    await userEvent.tab()
+    expect(vm.scaleQuantity).toHaveBeenCalledWith(10)
+  })
 })

@@ -19,7 +19,7 @@ export default function Calc(props: CalcProps) {
   return (
     <Stack>
       <Title title={vm.recipe.title} onChange={vm.setTitle} />
-      <TextField label="Quantity" size="small" type="number" value={vm.recipe.quantity} onChange={(e) => vm.scaleQuantity(Number(e.target.value))} />
+      <TextField label="Quantity" size="small" type="number" defaultChecked={vm.recipe.quantity} onBlur={(e) => vm.scaleQuantity(Number(e.target.value))} />
       <Button onClick={vm.save}>Save recipe</Button>
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>

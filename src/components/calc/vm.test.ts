@@ -59,6 +59,15 @@ describe("calc vm", () => {
 
     expect(onChange).toHaveBeenCalledWith(scaledRecipe)
   })
+  it('prevents scaling quantity to 0', () => {
+    const onChange = jest.fn()
+    const { result } = renderHook(() => useCalcVM({ initialRecipe: defaultRecipe, onChange }))
+    act(() => {
+      result.current.scaleQuantity(0)
+    })
+
+    expect(onChange).not.toHaveBeenCalled()
+  })
   it('adds a section', () => {
     const { result } = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange: () => {} }))
     act(() => {

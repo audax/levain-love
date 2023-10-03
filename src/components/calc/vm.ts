@@ -26,6 +26,7 @@ export function useCalcVM(props: CalcProps): CalcVM {
     setRecipe(changed);
   }
   const scaleQuantity = (quantity: number) => {
+    if (quantity <= 0) { return }
     update(scaleRecipe(recipe, quantity))
   }
   const setQuantity = (quantity: number) => {
