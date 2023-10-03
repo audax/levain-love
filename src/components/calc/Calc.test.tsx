@@ -89,40 +89,44 @@ describe('Calc', () => {
     await userEvent.click(removeButtons[0])
     expect(vm.removeSection).toHaveBeenCalledWith(defaultRecipe.sections[0])
   })
-  it('exports the recipe', async () => {
-    render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
-
-    const exportString = screen.getByTestId('export').textContent ?? ''
-    expect(JSON.parse(exportString)).toEqual(defaultRecipe)
-  })
-  it('loads the recipe', async () => {
-    render(<Calc initialRecipe={emptyRecipe} onChange={change}/>)
-
-    const loadInput = screen.getByTestId('load')
-
-    fireEvent.change(loadInput, {target: {value: 'recipe'} })
-
-    const button = screen.getByRole('button', {
-      name: /Load recipe/i
+  describe('import, export, load', () => {
+    beforeEach(async () => {
+      render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
+      await userEvent.click(screen.getByText('Export, Import, Loading'))
     })
-    await userEvent.click(button)
 
-    expect(vm.loadRecipe).toHaveBeenCalledWith('recipe')
-  })
+    it('exports the recipe', async () => {
 
-  it('imports a recipe', async () => {
-    render(<Calc initialRecipe={emptyRecipe} onChange={change}/>)
-
-    const loadInput = screen.getByTestId('import')
-
-    fireEvent.change(loadInput, {target: {value: 'import recipe'} })
-
-    const button = screen.getByRole('button', {
-      name: /Import recipe/i
+      const exportString = screen.getByTestId('export').textContent ?? ''
+      expect(JSON.parse(exportString)).toEqual(defaultRecipe)
     })
-    await userEvent.click(button)
+    it('loads the recipe', async () => {
 
-    expect(vm.importRecipe).toHaveBeenCalledWith('import recipe')
+      const loadInput = screen.getByTestId('load')
+
+      fireEvent.change(loadInput, {target: {value: 'recipe'} })
+
+      const button = screen.getByRole('button', {
+        name: /Load recipe/i
+      })
+      await userEvent.click(button)
+
+      expect(vm.loadRecipe).toHaveBeenCalledWith('recipe')
+    })
+
+    it('imports a recipe', async () => {
+
+      const loadInput = screen.getByTestId('import')
+
+      fireEvent.change(loadInput, {target: {value: 'import recipe'} })
+
+      const button = screen.getByRole('button', {
+        name: /Import recipe/i
+      })
+      await userEvent.click(button)
+
+      expect(vm.importRecipe).toHaveBeenCalledWith('import recipe')
+    })
   })
   it('saves a recipe', async () => {
     render(<Calc initialRecipe={emptyRecipe} onChange={change}/>)

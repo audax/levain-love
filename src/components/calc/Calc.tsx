@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react";
-import { Button, Stack, TextareaAutosize } from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Button, Stack, TextareaAutosize} from "@mui/material";
 import RecipeHeader from "./RecipeHeader";
 import { useCalcVM } from "./vm";
 import { CalcProps } from "./types";
@@ -27,11 +27,16 @@ export default function Calc(props: CalcProps) {
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>
       <RecipePropertiesDisplay properties={vm.properties} />
-      <TextareaAutosize data-testid="export" value={JSON.stringify(vm.recipe, null, 2)} />
-      <TextareaAutosize data-testid="load" ref={loadRef} />
-      <Button onClick={() => loadRef.current && vm.loadRecipe(loadRef.current.value)}>Load recipe</Button>
-      <TextareaAutosize data-testid="import" ref={importRef} />
-      <Button onClick={() => importRef.current && vm.importRecipe(importRef.current.value)}>Import recipe</Button>
+      <Accordion>
+          <AccordionSummary>Export, Import, Loading</AccordionSummary>
+          <AccordionDetails>
+              <TextareaAutosize data-testid="export" value={JSON.stringify(vm.recipe, null, 2)} />
+              <TextareaAutosize data-testid="load" ref={loadRef} />
+              <Button onClick={() => loadRef.current && vm.loadRecipe(loadRef.current.value)}>Load recipe</Button>
+              <TextareaAutosize data-testid="import" ref={importRef} />
+              <Button onClick={() => importRef.current && vm.importRecipe(importRef.current.value)}>Import recipe</Button>
+          </AccordionDetails>
+      </Accordion>
     </Stack>
   );
 }
