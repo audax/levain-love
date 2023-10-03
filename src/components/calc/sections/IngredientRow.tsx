@@ -1,6 +1,6 @@
 import * as React from "react";
 import {EnrichedIngredient, Ingredient, IngredientType} from "@/data/recipe";
-import {IconButton, InputAdornment, MenuItem, TextField, styled, TableRow, TableCell, ButtonGroup} from "@mui/material";
+import {IconButton, InputAdornment, MenuItem, TextField, styled, TableRow, TableCell, ButtonGroup, Tooltip} from "@mui/material";
 import {Cancel, Delete, Edit, Save} from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)({
@@ -48,12 +48,16 @@ export default function IngredientRow(props: IngredientRowProps) {
                 <StyledTableCell align="right">{ingredient.type}</StyledTableCell>
                 <StyledTableCell align="right">
                     <ButtonGroup variant="outlined">
-                        <IconButton size="small" aria-label="remove ingredient" onClick={props.onDelete}>
-                            <Delete/>
-                        </IconButton>
-                        <IconButton size="small" aria-label="edit ingredient" onClick={() => setEditMode(true)}>
-                            <Edit/>
-                        </IconButton>
+                        <Tooltip title="Remove ingredient">
+                            <IconButton size="small" aria-label="remove ingredient" onClick={props.onDelete}>
+                                <Delete/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Edit ingredient">
+                            <IconButton size="small" aria-label="edit ingredient" onClick={() => setEditMode(true)}>
+                                <Edit/>
+                            </IconButton>
+                        </Tooltip>
                     </ButtonGroup>
                 </StyledTableCell>
             </TableRow>
@@ -71,12 +75,16 @@ export default function IngredientRow(props: IngredientRowProps) {
             <StyledTableCell>
                 <ButtonGroup variant="outlined">
 
-                    <IconButton aria-label="save ingredient" onClick={commitEdit}>
-                        <Save/>
-                    </IconButton>
-                    <IconButton aria-label="cancel ingredient" onClick={cancelEdit}>
-                        <Cancel/>
-                    </IconButton>
+                    <Tooltip title="Confirm edit">
+                        <IconButton aria-label="save ingredient" onClick={commitEdit}>
+                            <Save/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Cancel edit">
+                        <IconButton aria-label="cancel ingredient" onClick={cancelEdit}>
+                            <Cancel/>
+                        </IconButton>
+                    </Tooltip>
                 </ButtonGroup>
             </StyledTableCell>
         </TableRow>

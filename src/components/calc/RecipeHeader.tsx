@@ -1,4 +1,4 @@
-import {ButtonGroup, Chip, IconButton, TextField} from "@mui/material";
+import {ButtonGroup, Chip, IconButton, TextField, Tooltip} from "@mui/material";
 import * as React from 'react';
 import {Cancel, Edit, Save, Scale } from "@mui/icons-material";
 
@@ -37,15 +37,21 @@ export default function RecipeHeader(props: RecipeHeaderProps) {
                  }}
       />
       <ButtonGroup variant="outlined">
-        <IconButton aria-label="confirm edit" onClick={confirmEdit}>
-          <Save/>
-        </IconButton>
+        <Tooltip title="Confirm edit">
+          <IconButton aria-label="confirm edit" onClick={confirmEdit}>
+            <Save/>
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Cancel edit">
         <IconButton aria-label="cancel edit" onClick={() => setEditMode(false)}>
           <Cancel/>
         </IconButton>
-        <IconButton aria-label="scale recipe" onClick={() => {props.scaleQuantity(quantity)}}>
-          <Scale/>
-        </IconButton>
+        </Tooltip>
+        <Tooltip title="Scale the recipe to this quantity">
+          <IconButton aria-label="scale recipe" onClick={() => {props.scaleQuantity(quantity)}}>
+            <Scale/>
+          </IconButton>
+        </Tooltip>
       </ButtonGroup>
     </h2>
   } else {

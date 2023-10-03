@@ -1,5 +1,5 @@
 import {Section, SectionType} from "@/data/recipe";
-import {ButtonGroup, Chip, IconButton, MenuItem, TextField} from "@mui/material";
+import {ButtonGroup, Chip, IconButton, MenuItem, TextField, Tooltip} from "@mui/material";
 import React from "react";
 import {Cancel, Delete, Edit, Save} from "@mui/icons-material";
 
@@ -36,24 +36,32 @@ export default function SectionHeader(props: SectionHeaderProps) {
                 ))}
             </TextField>
             <ButtonGroup variant="outlined">
-                <IconButton size="small" aria-label="confirm edit" onClick={confirmEdit}>
+                <Tooltip title="Confirm edit">
+                <IconButton aria-label="confirm edit" onClick={confirmEdit}>
                     <Save/>
                 </IconButton>
-                <IconButton size="small" aria-label="cancel edit" onClick={() => setEditMode(false)}>
+                </Tooltip>
+                <Tooltip title="Cancel edit">
+                <IconButton aria-label="cancel edit" onClick={() => setEditMode(false)}>
                     <Cancel/>
                 </IconButton>
+                </Tooltip>
             </ButtonGroup>
         </h2>
     } else {
         return <h2>
             {props.section.name} <Chip label={props.section.type}/>
             <ButtonGroup variant="outlined">
-                <IconButton size="small" aria-label="remove section" onClick={props.remove}>
-                    <Delete/>
-                </IconButton>
-                <IconButton size="small" aria-label="edit section header" onClick={() => setEditMode(true)}>
-                    <Edit/>
-                </IconButton>
+                <Tooltip title="Remove section">
+                    <IconButton aria-label="remove section" onClick={props.remove}>
+                        <Delete/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit section header">
+                    <IconButton aria-label="edit section header" onClick={() => setEditMode(true)}>
+                        <Edit/>
+                    </IconButton>
+                </Tooltip>
             </ButtonGroup>
         </h2>
     }

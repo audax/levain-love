@@ -20,7 +20,7 @@ export default function About() {
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
-          About blank
+          Find out more about this project on <a href="https://github.com/audax/levain-love" target="_blank" >Github</a>
         </Typography>
         <Link href="/">Go to the main page</Link>
         <Copyright />
