@@ -19,9 +19,7 @@ const commonProps: SectionBuilderProps = {
 
 describe('section vm', () => {
   beforeEach(() => {
-    jest.mocked(confirmSpy).mockClear()
-    jest.mocked(commonProps.onChange).mockClear()
-    jest.mocked(commonProps.remove).mockClear()
+    jest.clearAllMocks()
   })
   it('exposes state and setters for edit mode', () => {
     const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))

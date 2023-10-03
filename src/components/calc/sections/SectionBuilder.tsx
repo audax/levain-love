@@ -2,9 +2,9 @@ import * as React from "react";
 import { SectionBuilderProps } from "./types";
 import { useSectionBuilderVm } from "./vm";
 import IngredientRow from "./IngredientRow";
-import {Button, ButtonGroup, Card, Chip, IconButton, Paper, Table, TableBody, TableContainer} from "@mui/material";
+import SectionHeader from "./SectionHeader";
+import {Button, ButtonGroup, Card, Paper, Table, TableBody, TableContainer} from "@mui/material";
 import { IngredientType } from "@/data/recipe";
-import {Delete} from "@mui/icons-material";
 
 export default function SectionBuilder(props: SectionBuilderProps) {
   const vm = useSectionBuilderVm(props);
@@ -23,12 +23,11 @@ export default function SectionBuilder(props: SectionBuilderProps) {
 
   return (
     <Card>
-      <h2>
-          {vm.section.name} <Chip label={vm.section.type} />
-        <IconButton size="small" aria-label="remove section" onClick={vm.remove}>
-            <Delete/>
-        </IconButton>
-      </h2>
+      <SectionHeader section={vm.section} remove={vm.remove} initialEditMode={false}
+                     onUpdate={({name, type}) => {
+                         vm.setName(name)
+                         vm.setType(type)
+                     }}/>
       <TableContainer component={Paper}>
         <Table size="small">
           <TableBody>
