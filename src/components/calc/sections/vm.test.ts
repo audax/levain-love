@@ -1,4 +1,10 @@
 import { renderHook } from "@testing-library/react"
+
+const confirmSpy = jest.fn(() => Promise.resolve());
+jest.mock("material-ui-confirm", () => ({
+  useConfirm: () => confirmSpy,
+}));
+
 import { useSectionBuilderVm } from "./vm"
 import { emptySection, exampleSection } from "./_fixtures"
 import { IngredientType, SectionType } from "@/data/recipe"
@@ -12,8 +18,10 @@ const commonProps: SectionBuilderProps = {
 }
 
 describe('section vm', () => {
-  afterEach(() => {
+  beforeEach(() => {
+    jest.mocked(confirmSpy).mockClear()
     jest.mocked(commonProps.onChange).mockClear()
+    jest.mocked(commonProps.remove).mockClear()
   })
   it('exposes state and setters for edit mode', () => {
     const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
@@ -22,6 +30,22 @@ describe('section vm', () => {
       result.current.startEdit()
     })
     expect(result.current.editMode).toBe(true)
+  })
+  it('removes ingredients', async () => {
+    const {result} = renderHook(() => useSectionBuilderVm({...commonProps}))
+    await act(async () => {
+      await result.current.removeIngredient(exampleSection.ingredients[0])
+    })
+    expect(confirmSpy).toHaveBeenCalled()
+    expect(commonProps.onChange).toHaveBeenCalledWith({...exampleSection, ingredients: [exampleSection.ingredients[1], exampleSection.ingredients[2]]})
+  })
+  it('removes section', async () => {
+    const {result} = renderHook(() => useSectionBuilderVm({...commonProps}))
+    await act(async () => {
+      await result.current.remove()
+    })
+    expect(confirmSpy).toHaveBeenCalled()
+    expect(commonProps.remove).toHaveBeenCalledWith(commonProps.initialSection)
   })
   it('cancels edit mode', () => {
     const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
@@ -68,11 +92,9 @@ describe('section vm', () => {
     expect(result.current.section.ingredients[2].pct).toBe(2)
   })
 
-  it('removes itself', () => {
+  it('removes itself', async () => {
     const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
-    act(() => {
-      result.current.remove()
-    })
+    await act(result.current.remove)
 
     expect(commonProps.remove).toHaveBeenCalledWith(commonProps.initialSection)
 

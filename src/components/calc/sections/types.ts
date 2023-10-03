@@ -12,9 +12,9 @@ export interface SectionBuilderVM {
   setName: (name: string) => void;
   setType: (type: SectionType) => void;
   addIngredient: (type: IngredientType) => Ingredient;
-  removeIngredient: (ingredient: Ingredient) => void;
+  removeIngredient: (ingredient: Ingredient) => Promise<void>;
   updateIngredient: (ingredient: Ingredient) => void;
-  remove: () => void;
+  remove: () => Promise<void>;
 }
 
 export interface SectionBuilderProps {

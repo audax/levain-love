@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
-import { Ingredient, IngredientType, Section, SectionType } from "@/data/recipe";
+import { Ingredient, IngredientType, Section } from "@/data/recipe";
 import { SectionBuilderProps, SectionBuilderVM } from "./types";
 import { enrichSection } from "@/data/calculate";
-import { set } from "lodash";
+import {useConfirm} from "material-ui-confirm";
 
 function buildIngredient(type: IngredientType): Ingredient {
   switch (type) {
@@ -56,6 +56,7 @@ function buildIngredient(type: IngredientType): Ingredient {
 
 export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderVM {
   const { initialSection, onChange } = props
+  const confirm = useConfirm()
   const [section, setSection] = useState(initialSection)
   const [editMode, setEditMode] = useState(false)
   const [name, setName] = useState(initialSection.name)
@@ -75,7 +76,8 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
     editMode,
     type,
     name,
-    remove: () => props.remove(section),
+    remove: () => confirm({ title: `Remove section ${section.name}?` })
+        .then(() => props.remove(section)).catch(() => {}),
     startEdit: () => setEditMode(true),
     cancelEdit: () => {
       setEditMode(false)
@@ -97,11 +99,16 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
       });
       return ingredient;
     },
-    removeIngredient: (ingredient: Ingredient) =>
-      update({
-        ...section,
-        ingredients: [...section.ingredients.filter((i) => i.key !== ingredient.key)],
-      }),
+    removeIngredient: async (ingredient: Ingredient) => {
+      try {
+        await confirm({title: `Remove ingredient "${ingredient.name}"?`});
+        return update({
+          ...section,
+          ingredients: [...section.ingredients.filter((i) => i.key !== ingredient.key)],
+        });
+      } catch {
+      }
+    },
     updateIngredient: (ingredient: Ingredient) => {
       console.log("updateIngredient", ingredient);
       update({
