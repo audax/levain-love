@@ -25,6 +25,7 @@ export default function Calc(props: CalcProps) {
                  onBlur={(e) => vm.scaleQuantity(Number(e.target.value))}
                  onKeyDown={(e) => {
                      if (e.key != 'Enter') return
+                     console.log(e.key)
                      const value = quantityRef?.current?.value;
                      if (value) {
                          vm.scaleQuantity(Number(value))
