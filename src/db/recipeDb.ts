@@ -26,7 +26,7 @@ export async function saveRecipe(recipe: Recipe): Promise<string> {
         if (e.message === `relation "recipes" does not exist`) {
             console.log('Table does not exist, creating it now')
             await migrate()
-            const recipeResult = await sql`INSERT INTO recipes (data) VALUES ${JSON.stringify(recipe)} `
+            const recipeResult = await sql.query('INSERT INTO recipes (data) VALUES ($1) RETURNING id', [recipe])
             return recipeResult.rows[0].id
         } else {
             throw e
