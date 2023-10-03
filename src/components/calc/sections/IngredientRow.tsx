@@ -7,7 +7,7 @@ const StyledTableCell = styled(TableCell)({
     padding: 0,
 })
 
-interface IngredientRowProps {
+export interface IngredientRowProps {
     ingredient: EnrichedIngredient;
     onChange: (ingredient: Ingredient) => void;
     onDelete: () => void;

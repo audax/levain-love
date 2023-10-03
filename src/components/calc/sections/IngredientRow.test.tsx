@@ -2,7 +2,8 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { EnrichedIngredient, IngredientType } from "@/data/recipe";
-import IngredientRow from "./IngredientRow";
+import IngredientRow  from "./IngredientRow";
+import {ReactNode} from "react";
 
 const exampleIngredient: EnrichedIngredient = {
   key: "flour",
@@ -20,23 +21,32 @@ const commonProps = {
 };
 
 describe("IngredientRow", () => {
+
+  const inTable = (element: ReactNode) => {
+    return <table>
+        <tbody>
+          {element}
+        </tbody>
+      </table>
+  }
+
   describe('read only mode', () => {
     it("renders an ingredient read only", () => {
-      render(<IngredientRow {...commonProps} />);
+      render(inTable(<IngredientRow {...commonProps} />));
       expect(screen.getByText("flour ingredient")).toBeInTheDocument();
       expect(screen.getByText("100")).toBeInTheDocument();
       expect(screen.getByText("flour")).toBeInTheDocument();
       expect(screen.getByText("99.00")).toBeInTheDocument();
     });
     it("reacts to prop changes", () => {
-      const { rerender } = render(<IngredientRow {...commonProps} />);
+      const { rerender } = render(inTable(<IngredientRow {...commonProps} />));
       expect(screen.getByText("flour ingredient")).toBeInTheDocument();
 
-      rerender(<IngredientRow {...commonProps } ingredient={{...exampleIngredient, name: 'new name'}} />);
+      rerender(inTable(<IngredientRow {...commonProps } ingredient={{...exampleIngredient, name: 'new name'}} />));
       expect(screen.getByText("new name")).toBeInTheDocument();
     });
     it("switches to edit mode", async () => {
-      render(<IngredientRow {...commonProps} />);
+      render(inTable(<IngredientRow {...commonProps} />));
 
       const editButton = screen.getByRole("button", { name: /edit ingredient/i });
 
@@ -45,9 +55,9 @@ describe("IngredientRow", () => {
       expect(screen.getByRole("button", { name: /cancel ingredient/i })).toBeInTheDocument();
     });
     it("does not switch to edit mode by prop change", () => {
-      const { rerender } = render(<IngredientRow {...commonProps} />);
+      const { rerender } = render(inTable(<IngredientRow {...commonProps} />));
 
-      rerender(<IngredientRow {...commonProps } initialEditMode={true} />);
+      rerender(inTable(<IngredientRow {...commonProps } initialEditMode={true} />));
 
       const editButton = screen.queryByRole("button", { name: /edit ingredient/i });
       expect(editButton).toBeInTheDocument();
@@ -55,7 +65,7 @@ describe("IngredientRow", () => {
   })
   describe('edit mode', () => {
     it('renders an ingredient in edit mode', () => {
-      render(<IngredientRow {...commonProps} initialEditMode={true} />);
+      render(inTable(<IngredientRow {...commonProps} initialEditMode={true} />));
       const editButton = screen.queryByRole("button", { name: /edit ingredient/i });
       expect(editButton).not.toBeInTheDocument();
 
@@ -68,7 +78,7 @@ describe("IngredientRow", () => {
     })
 
     it('edits multiple fields at once', async () => {
-      render(<IngredientRow {...commonProps} initialEditMode={true} />);
+      render(inTable(<IngredientRow {...commonProps} initialEditMode={true} />));
 
       const nameField = screen.getByLabelText('Name');
       await userEvent.clear(nameField);
