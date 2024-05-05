@@ -79,7 +79,6 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
         .then(() => props.remove(section)).catch(() => {}),
     updateHeader(name: string, type:SectionType): void {
       update({...section, name, type})
-      console.log('commit section update', name, type)
     },
     scaleByFactor,
     addIngredient: (type: IngredientType) => {
@@ -101,7 +100,6 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
       }
     },
     updateIngredient: (ingredient: Ingredient) => {
-      console.log("updateIngredient", ingredient);
       update({
         ...section,
         ingredients: [...section.ingredients.map((i) => (i.key === ingredient.key ? ingredient : i))],

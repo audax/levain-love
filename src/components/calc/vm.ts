@@ -61,7 +61,6 @@ export function useCalcVM(props: Readonly<CalcProps>): CalcVM {
         sections: [...recipe.sections.filter(s => s.key !== section.key)  ]
       }),
     updateSection: (section: Section) => {
-      console.log('update section', section)
       update({
         ...recipe,
         sections: [...recipe.sections.map(s => s.key === section.key ? section : s)]
