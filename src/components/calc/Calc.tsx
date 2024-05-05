@@ -8,7 +8,7 @@ import { CalcProps } from "./types";
 import RecipePropertiesDisplay from "./RecipePropertyDisplay";
 import SectionBuilder from "./sections/SectionBuilder";
 
-export default function Calc(props: CalcProps) {
+export default function Calc(props: Readonly<CalcProps>) {
   const vm = useCalcVM(props)
   const loadRef = React.useRef<HTMLTextAreaElement>(null)
   const importRef = React.useRef<HTMLTextAreaElement>(null)
@@ -20,8 +20,7 @@ export default function Calc(props: CalcProps) {
     <Stack>
       <RecipeHeader name={vm.recipe.title} initialEditMode={false}
                     quantity={vm.recipe.quantity} onUpdate={({name, quantity}) => {
-                        vm.setTitle(name)
-                        vm.setQuantity(quantity)
+                        vm.updateTitleAndQuantity(name, quantity)
                     }} scaleQuantity={vm.scaleQuantity}/>
       <Button disabled={!vm.modified} onClick={vm.save}>Save recipe</Button>
       <Stack>{sections}</Stack>

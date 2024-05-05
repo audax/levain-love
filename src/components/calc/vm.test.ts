@@ -32,7 +32,7 @@ describe("calc vm", () => {
     const onChange = jest.fn()
     const { result } = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange }))
     act(() => {
-      result.current.setTitle('test')
+      result.current.updateTitleAndQuantity('test', emptyRecipe.quantity)
     })
 
     expect(onChange).toHaveBeenCalledWith({ ...emptyRecipe, title: 'test' })
@@ -43,7 +43,7 @@ describe("calc vm", () => {
     const { result } = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange }))
 
     act(() => {
-      result.current.setQuantity(100)
+      result.current.updateTitleAndQuantity(emptyRecipe.title, 100)
     })
 
     expect(onChange).toHaveBeenCalledWith({ ...emptyRecipe, quantity: 100})
@@ -124,7 +124,7 @@ describe("calc vm", () => {
     const {result} = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange: () => {} }))
     expect(result.current.modified).toBe(false)
     act(() => {
-      result.current.setTitle('new title')
+      result.current.updateTitleAndQuantity('new title', 1)
     })
     expect(result.current.modified).toBe(true)
 
