@@ -1,7 +1,7 @@
 import * as React from "react";
 import {EnrichedIngredient, Ingredient, IngredientType} from "@/data/recipe";
-import {IconButton, InputAdornment, MenuItem, TextField, styled, TableRow, TableCell, ButtonGroup, Tooltip} from "@mui/material";
-import {Cancel, Delete, Edit, Save} from "@mui/icons-material";
+import {ButtonGroup, IconButton, InputAdornment, MenuItem, styled, TableCell, TableRow, TextField, Tooltip} from "@mui/material";
+import {Cancel, Delete, Edit, Save, Scale} from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)({
     padding: 0,
@@ -9,18 +9,23 @@ const StyledTableCell = styled(TableCell)({
 
 export interface IngredientRowProps {
     ingredient: EnrichedIngredient;
-    onChange: (ingredient: Ingredient) => void;
-    onDelete: () => void;
+    onChange(ingredient: Ingredient): void;
+    onDelete():void;
+    onScale(factor: number): void; // add the new onScale prop
     initialEditMode: boolean;
 }
-
-export default function IngredientRow(props: IngredientRowProps) {
+export default function IngredientRow(props: Readonly<IngredientRowProps>) {
     const {ingredient, onChange, initialEditMode} = props;
     const [row, setRow] = React.useState(ingredient);
     React.useEffect(() => {
         setRow(ingredient);
     }, [ingredient]);
     const [editMode, setEditMode] = React.useState(initialEditMode);
+
+    const handleScale = () => {
+        props.onScale(row.weight / ingredient.weight);
+        setEditMode(false);
+    };
 
     const hasHydration = ingredient.type === IngredientType.starter
     const commitEdit = () => {
@@ -74,7 +79,13 @@ export default function IngredientRow(props: IngredientRowProps) {
             </StyledTableCell>
             <StyledTableCell>
                 <ButtonGroup variant="outlined">
-
+                    <Tooltip title="Scale recipe">
+                      <span> {/* Add a span to allow the tooltip to be shown even when the button is disabled */}
+                          <IconButton size="small" aria-label="scale recipe" onClick={handleScale} disabled={row.weight === 0}>
+                          <Scale/>
+                        </IconButton>
+                      </span>
+                    </Tooltip>
                     <Tooltip title="Confirm edit">
                         <IconButton aria-label="save ingredient" onClick={commitEdit}>
                             <Save/>

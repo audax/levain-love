@@ -13,6 +13,7 @@ export interface CalcVM {
   removeSection(section: Section): void;
   addSection(): void;
   scaleQuantity(quantity: number): void;
+  scaleByFactor(factor: number): void;
   save(): Promise<void>;
   readonly recipe: Recipe;
   readonly properties: RecipeProperties

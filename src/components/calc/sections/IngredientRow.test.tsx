@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { EnrichedIngredient, IngredientType } from "@/data/recipe";
-import IngredientRow  from "./IngredientRow";
+import IngredientRow, {IngredientRowProps} from "./IngredientRow";
 import {ReactNode} from "react";
 
 const exampleIngredient: EnrichedIngredient = {
@@ -13,9 +13,10 @@ const exampleIngredient: EnrichedIngredient = {
   pct: 99,
 };
 
-const commonProps = {
+const commonProps: IngredientRowProps = {
   onChange: jest.fn(),
   onDelete: jest.fn(),
+  onScale: jest.fn(),
   initialEditMode: false,
   ingredient: exampleIngredient,
 };
@@ -125,5 +126,28 @@ describe("IngredientRow", () => {
         ...starterIngredient, hydration: 50
       })
     })
+    describe('scale functionality', () => {
+      it('calls onScale with the correct factor when the scale button is clicked', async () => {
+        const onScale = jest.fn();
+        render(inTable(<IngredientRow {...commonProps} onScale={onScale} initialEditMode={true} />));
+
+        const weightField = screen.getByLabelText('Weight');
+        await userEvent.clear(weightField);
+        await userEvent.type(weightField, '200');
+
+        const scaleButton = screen.getByRole("button", { name: /scale recipe/i });
+        await userEvent.click(scaleButton);
+
+        expect(onScale).toHaveBeenCalledWith(2);
+        const editButton = screen.queryByRole("button", { name: /edit ingredient/i });
+        expect(editButton).toBeInTheDocument();
+      });
+      it('disables the scale button when the weight is 0', async () => {
+        render(inTable(<IngredientRow {...commonProps} ingredient={{...exampleIngredient, weight: 0}} initialEditMode={true} />));
+
+        const scaleButton = screen.getByRole("button", { name: /scale recipe/i });
+        expect(scaleButton).toBeDisabled();
+      });
+    });
   })
 });

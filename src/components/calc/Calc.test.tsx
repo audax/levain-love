@@ -13,6 +13,7 @@ const vm: CalcVM = {
   addSection: jest.fn(),
   properties: calculateRecipeProperties(defaultRecipe),
   scaleQuantity: jest.fn(),
+  scaleByFactor: jest.fn(),
   loadRecipe: jest.fn(),
   importRecipe: jest.fn(),
   save: jest.fn(),

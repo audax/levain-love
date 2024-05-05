@@ -68,6 +68,18 @@ describe("calc vm", () => {
 
     expect(onChange).not.toHaveBeenCalled()
   })
+
+  it("scales a recipe by a given factor", () => {
+    const initialRecipe = defaultRecipe;
+    const { result } = renderHook(() => useCalcVM({ initialRecipe, onChange: jest.fn() }));
+    const { scaleByFactor } = result.current;
+
+    act(() => {
+      scaleByFactor(2);
+    });
+
+    expect(result.current.recipe).toEqual(scaledRecipe);
+  });
   it('adds a section', () => {
     const { result } = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange: () => {} }))
     act(() => {

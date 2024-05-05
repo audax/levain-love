@@ -9,16 +9,18 @@ export interface SectionBuilderVM {
   editMode: boolean;
   startEdit(): void;
   section: EnrichedSection;
-  setName: (name: string) => void;
-  setType: (type: SectionType) => void;
-  addIngredient: (type: IngredientType) => Ingredient;
-  removeIngredient: (ingredient: Ingredient) => Promise<void>;
-  updateIngredient: (ingredient: Ingredient) => void;
-  remove: () => Promise<void>;
+  setName(name: string): void;
+  setType(type: SectionType): void;
+  addIngredient(type: IngredientType): Ingredient;
+  removeIngredient(ingredient: Ingredient): Promise<void>;
+  updateIngredient(ingredient: Ingredient): void;
+  remove(): Promise<void>;
+  scaleByFactor(factor: number): void;
 }
 
 export interface SectionBuilderProps {
   initialSection: Section;
-  onChange: (section: Section) => void;
-  remove: (section: Section) => void;
+  onChange(section: Section): void;
+  onScale(factor: number): void;
+  remove(section: Section): void;
 }

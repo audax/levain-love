@@ -16,6 +16,7 @@ const vm: SectionBuilderVM = {
   commitEdit: jest.fn(),
   type: enrichedExample.type,
   name: enrichedExample.name,
+  scaleByFactor: jest.fn(),
   cancelEdit: function (): void {
     throw new Error("Function not implemented.");
   },
@@ -29,6 +30,7 @@ const vm: SectionBuilderVM = {
 const props: SectionBuilderProps = {
   initialSection: exampleSection,
   onChange: jest.fn(),
+  onScale: jest.fn(),
   remove: jest.fn(),
 };
 
@@ -95,18 +97,20 @@ describe("SectionBuilder", () => {
       const ingredientName = screen.getAllByLabelText(label);
       await userEvent.clear(ingredientName[ingredientIndex]);
       await userEvent.type(ingredientName[ingredientIndex], value);
+    }
 
+    const save = async () => {
       const saveButton = screen.getByRole("button", {
         name: /save ingredient/i,
       });
       fireEvent.click(saveButton);
     }
-
     it("updates an ingredient name", async () => {
       const spy = jest.spyOn(vm, "updateIngredient");
       render(<SectionBuilder {...props} initialSection={emptySection} />);
 
       await update(0, "Name", "new name");
+      await save()
 
       expect(spy).toHaveBeenCalledWith({ ...enrichedExample.ingredients[0], name: "new name" });
     });
@@ -116,8 +120,18 @@ describe("SectionBuilder", () => {
       render(<SectionBuilder {...props} />);
 
       await update(0, "Weight", "1001");
+      await save()
 
       expect(spy).toHaveBeenCalledWith({ ...enrichedExample.ingredients[0], weight: 1001 });
+    });
+    it('calls onScale with the correct factor when scale button is clicked', async () => {
+      render(<SectionBuilder {...props} />);
+
+      await update(0, "Weight", "200");
+      const scaleButtons = screen.getAllByRole("button", { name: /scale recipe/i });
+      await userEvent.click(scaleButtons[0]);
+
+      expect(vm.scaleByFactor).toHaveBeenCalledWith(2); // assuming the scale factor is 2
     });
     it("updates an ingredient type", async () => {
       const spy = jest.spyOn(vm, "updateIngredient");
