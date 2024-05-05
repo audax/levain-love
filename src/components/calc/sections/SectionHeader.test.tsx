@@ -49,7 +49,10 @@ describe('SectionHeader', () => {
             await userEvent.click(screen.getByText(SectionType.preferment))
             await userEvent.click(screen.getByRole('button', { name: /confirm edit/i }))
             expect(screen.queryByRole('button', { name: /cancel edit/i})).toBeNull()
-            expect(onUpdate).toHaveBeenCalledWith({name: 'new name', type: SectionType.preferment})
+            expect(onUpdate).toHaveBeenCalledWith('new name', SectionType.preferment)
+
+            expect(screen.getByText('new name')).toBeInTheDocument()
+            expect(screen.getByText(SectionType.preferment)).toBeInTheDocument()
         })
         it('cancels edit and reverts to read mode', async () => {
             expect(screen.getByDisplayValue(exampleSection.name)).toBeInTheDocument()
@@ -66,6 +69,8 @@ describe('SectionHeader', () => {
 
             expect(screen.queryByRole('button', { name: /cancel edit/i})).toBeNull()
             expect(onUpdate).not.toHaveBeenCalled()
+            expect(screen.getByText(exampleSection.name)).toBeInTheDocument()
+            expect(screen.getByText(exampleSection.type)).toBeInTheDocument()
 
             await userEvent.click(screen.getByRole('button', { name: /edit section/i }))
 

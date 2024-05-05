@@ -5,7 +5,7 @@ import {Cancel, Delete, Edit, Save} from "@mui/icons-material";
 
 export interface SectionHeaderProps {
     section: Section,
-    onUpdate: (header: { name: string, type: SectionType }) => void,
+    onUpdate( name: string, type: SectionType): void,
     remove: () => void,
     initialEditMode: boolean,
 }
@@ -22,7 +22,7 @@ export default function SectionHeader(props: Readonly<SectionHeaderProps>) {
 
     const confirmEdit = () => {
         setEditMode(false)
-        props.onUpdate({name: name, type: type})
+        props.onUpdate(name, type)
     }
     if (editMode) {
         return <h2>
@@ -60,7 +60,7 @@ export default function SectionHeader(props: Readonly<SectionHeaderProps>) {
         </h2>
     } else {
         return <h2>
-            {props.section.name} <Chip label={props.section.type}/>
+            {name} <Chip label={type}/>
             <ButtonGroup variant="outlined">
                 <Tooltip title="Remove section">
                     <IconButton aria-label="remove section" onClick={props.remove}>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
-import { Ingredient, IngredientType, Section } from "@/data/recipe";
+import {Ingredient, IngredientType, Section, SectionType} from "@/data/recipe";
 import { SectionBuilderProps, SectionBuilderVM } from "./types";
 import { enrichSection } from "@/data/calculate";
 import {useConfirm} from "material-ui-confirm";
@@ -58,12 +58,10 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
   const { initialSection, onChange } = props
   const confirm = useConfirm()
   const [section, setSection] = useState(initialSection)
-  const [editMode, setEditMode] = useState(false)
-  const [name, setName] = useState(initialSection.name)
-  const [type, setType] = useState(initialSection.type)
   useEffect(() => {
     setSection(initialSection)
   }, [initialSection])
+
   const update = (changed: Section) => {
     onChange(changed);
     setSection(changed);
@@ -77,24 +75,12 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
 
   return {
     section: enrichedSection,
-    editMode,
-    type,
-    name,
     remove: () => confirm({ title: `Remove section ${section.name}?` })
         .then(() => props.remove(section)).catch(() => {}),
-    startEdit: () => setEditMode(true),
-    cancelEdit: () => {
-      setEditMode(false)
-      setName(section.name)
-      setType(section.type)
-    },
-    commitEdit: () => {
-      if (!editMode) return;
+    updateHeader(name: string, type:SectionType): void {
       update({...section, name, type})
-      setEditMode(false)
+      console.log('commit section update', name, type)
     },
-    setName,
-    setType,
     scaleByFactor,
     addIngredient: (type: IngredientType) => {
       const ingredient = buildIngredient(type);

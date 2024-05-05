@@ -25,10 +25,7 @@ export default function SectionBuilder(props: Readonly<SectionBuilderProps>) {
   return (
     <Card>
       <SectionHeader section={vm.section} remove={vm.remove} initialEditMode={false}
-                     onUpdate={({name, type}) => {
-                         vm.setName(name)
-                         vm.setType(type)
-                     }}/>
+                     onUpdate={vm.updateHeader}/>
       <TableContainer component={Paper}>
         <Table size="small">
           <TableBody>
