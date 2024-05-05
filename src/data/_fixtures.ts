@@ -24,6 +24,7 @@ export const defaultRecipe: Recipe = {
       ],
     },
   ],
+  description: 'Test Description'
 };
 
 export const scaledRecipe: Recipe = {
@@ -113,6 +114,7 @@ export const exampleForImport = {
 export const convertedExample: Recipe = {
   title: "Shokupan",
   quantity: 6,
+  description: '',
   sections: [
     {
       name: "Tangzhong",
@@ -220,6 +222,7 @@ export const sourdoughExample = {
 export const sourdoughConverted: Recipe = {
   title: "Sourdough",
   quantity: 2,
+  description: '',
   sections: [
     {
       ingredients: [

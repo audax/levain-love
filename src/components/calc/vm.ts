@@ -60,11 +60,13 @@ export function useCalcVM(props: Readonly<CalcProps>): CalcVM {
         ...recipe,
         sections: [...recipe.sections.filter(s => s.key !== section.key)  ]
       }),
-    updateSection: (section: Section) => {
+    updateSection: (section: Section) =>
       update({
         ...recipe,
         sections: [...recipe.sections.map(s => s.key === section.key ? section : s)]
-      })
+      }),
+    updateDescription(description: string) {
+      update({...recipe, description})
     }
   };
 }

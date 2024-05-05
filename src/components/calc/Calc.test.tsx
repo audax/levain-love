@@ -8,6 +8,7 @@ import { calculateRecipeProperties } from '@/data/calculate'
 const vm: CalcVM = {
   recipe: defaultRecipe,
   updateTitleAndQuantity: jest.fn(),
+  updateDescription: jest.fn(),
   updateSection: jest.fn(),
   removeSection: jest.fn(),
   addSection: jest.fn(),
@@ -185,4 +186,32 @@ describe('Calc', () => {
       expect(screen.getByLabelText('Quantity')).toHaveValue(1)
     })
   })
+  describe('RecipeDescription', () => {
+    beforeEach(() => {
+      render(<Calc initialRecipe={defaultRecipe} onChange={jest.fn()} />);
+    });
+
+    it('renders the description', () => {
+      expect(screen.getByText('Test Description')).toBeInTheDocument();
+    });
+
+    it('enters edit mode when the edit button is clicked', () => {
+      fireEvent.click(screen.getByLabelText('edit description'));
+      expect(screen.getByDisplayValue('Test Description')).toBeInTheDocument();
+    });
+
+    it('calls updateDescription when the confirm edit button is clicked', () => {
+      fireEvent.click(screen.getByLabelText('edit description'));
+      fireEvent.change(screen.getByDisplayValue('Test Description'), {target: {value: 'New Description'}});
+      fireEvent.click(screen.getByLabelText('confirm edit'));
+      expect(vm.updateDescription).toHaveBeenCalledWith('New Description');
+    });
+
+    it('cancels edit when the cancel edit button is clicked', () => {
+      fireEvent.click(screen.getByLabelText('edit description'));
+      fireEvent.change(screen.getByDisplayValue('Test Description'), {target: {value: 'New Description'}});
+      fireEvent.click(screen.getByLabelText('cancel edit'));
+      expect(screen.getByText('Test Description')).toBeInTheDocument();
+    });
+  });
 })

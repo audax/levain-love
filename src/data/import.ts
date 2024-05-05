@@ -49,5 +49,6 @@ export function importRecipe(recipe: any): Recipe {
     title: recipe.name,
     quantity: recipe.quantity,
     sections,
+    description: '',
   };
 }
