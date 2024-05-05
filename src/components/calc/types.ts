@@ -8,13 +8,13 @@ export interface CalcProps {
 export interface CalcVM {
   importRecipe(arg0: string): unknown;
   loadRecipe(value: string): void;
-  updateTitleAndQuantity(name: string, quantity: number): void;
+  updateTitleAndQuantity(title: string, quantity: number): void;
   updateSection(section: Section): void;
   removeSection(section: Section): void;
-  readonly recipe: Recipe;
-  readonly addSection: () => void;
-  readonly properties: RecipeProperties
-  readonly scaleQuantity: (quantity: number) => void;
+  addSection(): void;
+  scaleQuantity(quantity: number): void;
   save(): Promise<void>;
+  readonly recipe: Recipe;
+  readonly properties: RecipeProperties
   readonly modified: boolean
 }

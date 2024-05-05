@@ -124,6 +124,7 @@ describe('Calc', () => {
       await userEvent.click(button)
 
       expect(vm.loadRecipe).toHaveBeenCalledWith('recipe')
+
     })
 
     it('imports a recipe', async () => {
