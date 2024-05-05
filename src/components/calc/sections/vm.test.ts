@@ -22,13 +22,12 @@ describe('section vm', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
-  it('exposes state and setters for edit mode', () => {
-    const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
-    expect(result.current.editMode).toBe(false)
-    act(() => {
-      result.current.startEdit()
+  it('updates the header', async () => {
+    const {result} = renderHook(() => useSectionBuilderVm({...commonProps}))
+    await act(async () => {
+      result.current.updateHeader('new name', SectionType.preferment)
     })
-    expect(result.current.editMode).toBe(true)
+    expect(commonProps.onChange).toHaveBeenCalledWith({...exampleSection, name: 'new name', type: SectionType.preferment})
   })
   it('removes ingredients', async () => {
     const {result} = renderHook(() => useSectionBuilderVm({...commonProps}))
@@ -46,43 +45,6 @@ describe('section vm', () => {
     expect(confirmSpy).toHaveBeenCalled()
     expect(commonProps.remove).toHaveBeenCalledWith(commonProps.initialSection)
   })
-  it('cancels edit mode', () => {
-    const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
-    act(() => {
-      result.current.startEdit()
-      result.current.setName('new name')
-      result.current.setType(SectionType.preferment)
-      result.current.cancelEdit()
-    })
-    expect(result.current.editMode).toBe(false)
-    expect(result.current.name).toBe('dough-section')
-    expect(result.current.type).toBe(SectionType.dough)
-    expect(commonProps.onChange).not.toHaveBeenCalled()
-  })
-  it('commits from edit mode', () => {
-    const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
-    act(() => {
-      result.current.startEdit()
-    })
-    act(() => {
-      result.current.setName('new name')
-      result.current.setType(SectionType.preferment)
-    })
-    act(() => {
-      result.current.commitEdit()
-    })
-    expect(result.current.name).toBe('new name')
-    expect(result.current.type).toBe(SectionType.preferment)
-    expect(result.current.editMode).toBe(false)
-    expect(commonProps.onChange).toHaveBeenCalledWith({ ...exampleSection, name: 'new name', type: SectionType.preferment })
-  })
-
-  it('exposes state for section name and type', () => {
-    const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
-    expect(result.current.name).toBe('dough-section')
-    expect(result.current.type).toBe(SectionType.dough)
-  })
-
   it('enriches ingredients with pct', () => {
     const { result } = renderHook(() => useSectionBuilderVm({...commonProps}))
 

@@ -1,29 +1,18 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { IngredientType } from "@/data/recipe";
+import {IngredientType, SectionType} from "@/data/recipe";
 import { SectionBuilderProps, SectionBuilderVM } from "./types";
 
 const enrichedExample = enrichSection(exampleSection)
 
 const vm: SectionBuilderVM = {
   section: enrichedExample,
-  setName: jest.fn(),
-  setType: jest.fn(),
+  updateHeader: jest.fn(),
   updateIngredient: jest.fn(),
   removeIngredient: jest.fn(),
   addIngredient: jest.fn(),
-  commitEdit: jest.fn(),
-  type: enrichedExample.type,
-  name: enrichedExample.name,
   scaleByFactor: jest.fn(),
-  cancelEdit: function (): void {
-    throw new Error("Function not implemented.");
-  },
-  editMode: false,
-  startEdit: function (): void {
-    throw new Error("Function not implemented.");
-  },
   remove: jest.fn()
 };
 
@@ -153,6 +142,26 @@ describe("SectionBuilder", () => {
       fireEvent.click(saveButton);
 
       expect(spy).toHaveBeenCalledWith({ ...enrichedExample.ingredients[0], weight: 1001 });
+    });
+    it("updates the section name and type", async () => {
+        render(<SectionBuilder {...props} />);
+        await userEvent.click(screen.getByLabelText(/edit section header/i));
+
+        const nameField = screen.getByLabelText("Name");
+        await userEvent.clear(nameField);
+        await userEvent.type(nameField, "new name");
+
+        const typeField = screen.getByLabelText("Type");
+        fireEvent.mouseDown(typeField);
+        const listbox = within(screen.getByRole("listbox"));
+        await userEvent.click(listbox.getByText(/preferment/i));
+
+        const saveButton = screen.getByRole("button", {
+            name: /confirm edit/i,
+        });
+        fireEvent.click(saveButton);
+
+        expect(vm.updateHeader).toHaveBeenCalledWith("new name", SectionType.preferment);
     });
   });
 });
