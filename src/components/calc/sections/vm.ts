@@ -68,6 +68,10 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
     onChange(changed);
     setSection(changed);
   };
+  const scaleByFactor = (factor: number) => {
+    if (factor <= 0) { return }
+    props.onScale(factor);
+  }
 
   const enrichedSection = enrichSection(section);
 
@@ -91,6 +95,7 @@ export function useSectionBuilderVm(props: SectionBuilderProps): SectionBuilderV
     },
     setName,
     setType,
+    scaleByFactor,
     addIngredient: (type: IngredientType) => {
       const ingredient = buildIngredient(type);
       update({

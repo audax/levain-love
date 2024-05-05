@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Recipe, Section, SectionType } from "@/data/recipe";
 import { CalcProps, CalcVM } from "./types";
-import { calculateRecipeProperties, scaleRecipe } from "@/data/calculate";
+import {calculateRecipeProperties, scaleRecipeByFactor, scaleRecipeByQuantity} from "@/data/calculate";
 import { v4 as uuidv4 } from 'uuid';
 import { importRecipe } from "@/data/import";
 import {load} from "@/data/persistence";
@@ -29,8 +29,13 @@ export function useCalcVM(props: Readonly<CalcProps>): CalcVM {
   }
   const scaleQuantity = (quantity: number) => {
     if (quantity <= 0) { return }
-    update(scaleRecipe(recipe, quantity))
+    update(scaleRecipeByQuantity(recipe, quantity))
   }
+  const scaleByFactor = (factor: number) => {
+    if (factor <= 0) { return }
+    update(scaleRecipeByFactor(recipe, factor))
+  }
+
   const save = async () => {
     const id = await saveRecipe(recipe)
     router.push(`/recipe/${id}`)
@@ -39,6 +44,7 @@ export function useCalcVM(props: Readonly<CalcProps>): CalcVM {
     recipe,
     save,
     scaleQuantity,
+    scaleByFactor,
     modified,
     properties: calculateRecipeProperties(recipe),
     updateTitleAndQuantity: (title: string, quantity: number) => update({...recipe, title, quantity}),

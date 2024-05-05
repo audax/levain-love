@@ -1,4 +1,4 @@
-import { calculateRecipeProperties, enrichSection, scaleRecipe } from "@/data/calculate";
+import {calculateRecipeProperties, enrichSection, scaleRecipeByFactor, scaleRecipeByQuantity} from "@/data/calculate";
 import { IngredientType, Recipe, RecipeProperties, SectionType, emptyRecipe } from "@/data/recipe";
 import { defaultRecipe, scaledRecipe } from "./_fixtures";
 
@@ -119,7 +119,10 @@ describe("calculations", () => {
   });
   describe("scaling", () => {
     it("scales a recipe", () => {
-      expect(scaleRecipe(defaultRecipe, 2)).toEqual(scaledRecipe);
+      expect(scaleRecipeByQuantity(defaultRecipe, 2)).toEqual(scaledRecipe);
+    });
+    it("scales a recipe by factor", () => {
+      expect(scaleRecipeByFactor(defaultRecipe, 2)).toEqual(scaledRecipe);
     });
   });
 

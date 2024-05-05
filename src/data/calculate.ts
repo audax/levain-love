@@ -1,5 +1,5 @@
-import { EnrichedIngredient, EnrichedSection, IngredientType, Recipe, RecipeProperties, Section, SectionType } from "./recipe";
-import { produce } from "immer";
+import {EnrichedIngredient, EnrichedSection, IngredientType, Recipe, RecipeProperties, Section, SectionType} from "./recipe";
+import {produce} from "immer";
 
 function calculateFlourAndWaterWeights(hydration: number, weight: number) {
   const flourWeight = weight / (1 + hydration / 100);
@@ -47,10 +47,9 @@ export function calculateRecipeProperties(recipe: Recipe): RecipeProperties {
   };
 }
 
-export function scaleRecipe(recipe: Recipe, quantity: number): Recipe {
+export function scaleRecipeByFactor(recipe: Recipe, factor: number): Recipe {
   return produce(recipe, (draft) => {
-    const factor = quantity / recipe.quantity;
-    draft.quantity = quantity;
+    draft.quantity *= factor;
     draft.sections.forEach((section) => {
       section.ingredients.forEach((ingredient) => {
         ingredient.weight *= factor;
@@ -58,6 +57,11 @@ export function scaleRecipe(recipe: Recipe, quantity: number): Recipe {
     });
     return draft;
   });
+}
+
+export function scaleRecipeByQuantity(recipe: Recipe, quantity: number): Recipe {
+  const factor = quantity / recipe.quantity;
+  return scaleRecipeByFactor(recipe, factor);
 }
 
 export function enrichSection(section: Section): EnrichedSection {

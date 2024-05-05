@@ -14,6 +14,7 @@ import { act } from "react-dom/test-utils"
 const commonProps: SectionBuilderProps = {
   initialSection: exampleSection,
   onChange: jest.fn(),
+  onScale: jest.fn(),
   remove: jest.fn()
 }
 
@@ -110,5 +111,17 @@ describe('section vm', () => {
       })
     })
   })
+  describe('scale functionality', () => {
+    it('calls onScale with the correct factor when scaleByFactor is called', () => {
+      const onScale = jest.fn();
+      const { result } = renderHook(() => useSectionBuilderVm({...commonProps, onScale}));
+
+      act(() => {
+        result.current.scaleByFactor(2);
+      });
+
+      expect(onScale).toHaveBeenCalledWith(2);
+    });
+  });
 
 })

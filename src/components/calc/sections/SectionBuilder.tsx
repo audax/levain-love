@@ -6,7 +6,7 @@ import SectionHeader from "./SectionHeader";
 import {Button, ButtonGroup, Card, Paper, Table, TableBody, TableContainer} from "@mui/material";
 import { IngredientType } from "@/data/recipe";
 
-export default function SectionBuilder(props: SectionBuilderProps) {
+export default function SectionBuilder(props: Readonly<SectionBuilderProps>) {
   const vm = useSectionBuilderVm(props);
 
   const ingredientRows = vm.section.ingredients.map((ingredient) => {
@@ -17,6 +17,7 @@ export default function SectionBuilder(props: SectionBuilderProps) {
         ingredient={ingredient}
         onChange={vm.updateIngredient}
         onDelete={() => vm.removeIngredient(ingredient)}
+        onScale={vm.scaleByFactor}
       />
     );
   });
