@@ -1,6 +1,6 @@
 import {Section, SectionType} from "@/data/recipe";
 import {ButtonGroup, Chip, IconButton, MenuItem, TextField, Tooltip} from "@mui/material";
-import React from "react";
+import React, {useEffect} from "react";
 import {Cancel, Delete, Edit, Save} from "@mui/icons-material";
 
 export interface SectionHeaderProps {
@@ -10,10 +10,16 @@ export interface SectionHeaderProps {
     initialEditMode: boolean,
 }
 
-export default function SectionHeader(props: SectionHeaderProps) {
+export default function SectionHeader(props: Readonly<SectionHeaderProps>) {
     const [editMode, setEditMode] = React.useState(props.initialEditMode);
     const [name, setName] = React.useState(props.section.name);
     const [type, setType] = React.useState(props.section.type);
+
+    useEffect(() => {
+        setName(props.section.name)
+        setType(props.section.type)
+    }, [props.section.name, props.section.type])
+
     const confirmEdit = () => {
         setEditMode(false)
         props.onUpdate({name: name, type: type})
@@ -42,7 +48,11 @@ export default function SectionHeader(props: SectionHeaderProps) {
                 </IconButton>
                 </Tooltip>
                 <Tooltip title="Cancel edit">
-                <IconButton aria-label="cancel edit" onClick={() => setEditMode(false)}>
+                <IconButton aria-label="cancel edit" onClick={() => {
+                    setName(props.section.name)
+                    setType(props.section.type)
+                    setEditMode(false)}
+                }>
                     <Cancel/>
                 </IconButton>
                 </Tooltip>
