@@ -18,10 +18,11 @@ export default function Calc(props: Readonly<CalcProps>) {
   ));
   return (
     <Stack>
-      <RecipeHeader name={vm.recipe.title} initialEditMode={false}
-                    quantity={vm.recipe.quantity} onUpdate={({name, quantity}) => {
-                        vm.updateTitleAndQuantity(name, quantity)
-                    }} scaleQuantity={vm.scaleQuantity}/>
+      <RecipeHeader title={vm.recipe.title}
+                    initialEditMode={false}
+                    quantity={vm.recipe.quantity}
+                    onUpdate={vm.updateTitleAndQuantity}
+                    scaleQuantity={vm.scaleQuantity}/>
       <Button disabled={!vm.modified} onClick={vm.save}>Save recipe</Button>
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>
