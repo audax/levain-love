@@ -17,7 +17,7 @@ function buildSection(): Section {
   }
 }
 
-export function useCalcVM(props: CalcProps): CalcVM {
+export function useCalcVM(props: Readonly<CalcProps>): CalcVM {
   const { initialRecipe, onChange } = props;
   const [recipe, setRecipe] = useState(initialRecipe);
   const router = useRouter()
@@ -31,12 +31,6 @@ export function useCalcVM(props: CalcProps): CalcVM {
     if (quantity <= 0) { return }
     update(scaleRecipe(recipe, quantity))
   }
-  const setQuantity = (quantity: number) => {
-    update({
-      ...recipe,
-      quantity
-    })
-  }
   const save = async () => {
     const id = await saveRecipe(recipe)
     router.push(`/recipe/${id}`)
@@ -44,11 +38,10 @@ export function useCalcVM(props: CalcProps): CalcVM {
   return {
     recipe,
     save,
-    setQuantity,
     scaleQuantity,
     modified,
     properties: calculateRecipeProperties(recipe),
-    setTitle: (title: string) => update({ ...recipe, title }),
+    updateTitleAndQuantity: (title: string, quantity: number) => update({...recipe, title, quantity}),
     loadRecipe: (recipe: string) => {update(load(recipe))},
     importRecipe: (recipe: string) => {update(importRecipe(JSON.parse(recipe)))},
     addSection: () =>

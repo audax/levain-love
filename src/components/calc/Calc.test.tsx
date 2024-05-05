@@ -7,17 +7,16 @@ import { calculateRecipeProperties } from '@/data/calculate'
 
 const vm: CalcVM = {
   recipe: defaultRecipe,
-  setTitle: jest.fn(),
+  updateTitleAndQuantity: jest.fn(),
   updateSection: jest.fn(),
   removeSection: jest.fn(),
   addSection: jest.fn(),
   properties: calculateRecipeProperties(defaultRecipe),
-  setQuantity: jest.fn(),
   scaleQuantity: jest.fn(),
   loadRecipe: jest.fn(),
   importRecipe: jest.fn(),
   save: jest.fn(),
-  modified: false
+  get modified() { return false },
 }
 
 const VM_SPY = jest.fn((_: CalcProps) => (vm))
@@ -36,7 +35,7 @@ import {emptyRecipe } from '@/data/recipe'
 describe('Calc', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    vm.modified = false
+    jest.spyOn(vm, 'modified', 'get').mockReturnValue(false)
   })
   const change = jest.fn()
   it('renders a recipe', () => {
@@ -60,7 +59,7 @@ describe('Calc', () => {
     expect(rows[5].getByText('2')).toBeInTheDocument()
   })
   it('renders a modified recipe', () => {
-    vm.modified = true
+    jest.spyOn(vm, 'modified', 'get').mockReturnValue(true)
     render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
     expect(screen.getByText('Save recipe')).toBeEnabled()
   })
@@ -72,8 +71,10 @@ describe('Calc', () => {
     render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
     expect(VM_SPY).toHaveBeenCalledWith(
       { initialRecipe: defaultRecipe, onChange: change})
+    expect(screen.getByTestId('recipe-name')).toHaveTextContent(defaultRecipe.title)
     await userEvent.click(screen.getByRole('button', { 'name': /edit recipe header/i }))
-    const nameInput = screen.getByLabelText('Name')
+    const nameInput: HTMLElement = screen.getByLabelText('Name')
+    expect(nameInput).toHaveValue(defaultRecipe.title)
     await userEvent.clear(nameInput)
     await userEvent.type(nameInput, 'New recipe name')
 
@@ -82,8 +83,7 @@ describe('Calc', () => {
 
     await userEvent.click(screen.getByRole('button', { 'name': /confirm edit/i }))
 
-    expect(vm.setTitle).toHaveBeenCalledWith('New recipe name')
-    expect(vm.setQuantity).toHaveBeenCalledWith(100)
+    expect(vm.updateTitleAndQuantity).toHaveBeenCalledWith('New recipe name', 100)
   })
   it('adds sections', async () => {
     render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
@@ -141,7 +141,7 @@ describe('Calc', () => {
     })
   })
   it('saves a recipe', async () => {
-    vm.modified = true
+    jest.spyOn(vm, 'modified', 'get').mockReturnValue(true)
     render(<Calc initialRecipe={emptyRecipe} onChange={change}/>)
 
     const button = screen.getByRole('button', {
@@ -151,7 +151,7 @@ describe('Calc', () => {
 
     expect(vm.save).toHaveBeenCalled()
   })
-  describe('updating qantity', () => {
+  describe('updating quantity', () => {
     beforeEach(async () => {
       render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
       await userEvent.click(screen.getByRole('button', { 'name': /edit recipe header/i }))

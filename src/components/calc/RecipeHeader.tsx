@@ -3,18 +3,18 @@ import * as React from 'react';
 import {Cancel, Edit, Save, Scale } from "@mui/icons-material";
 
 interface RecipeHeaderProps {
-  name: string
-  quantity: number
-  onUpdate: (header: { name: string, quantity: number }) => void,
-  scaleQuantity: (quantity: number) => void,
-  initialEditMode: boolean,
+  readonly name: string
+  readonly quantity: number
+  readonly onUpdate: (header: { name: string, quantity: number }) => void,
+  readonly scaleQuantity: (quantity: number) => void,
+  readonly initialEditMode: boolean,
 }
 
 export default function RecipeHeader(props: RecipeHeaderProps) {
   const [editMode, setEditMode] = React.useState(props.initialEditMode);
   const [name, setName] = React.useState(props.name);
   const [quantity, setQuantity] = React.useState(props.quantity);
-  const nameOrFallback = name || '<Unnamed recipe>'
+  const nameOrFallback = name
   const quantityRef = React.useRef<HTMLInputElement>(null)
   const confirmEdit = () => {
     setEditMode(false)
@@ -28,12 +28,20 @@ export default function RecipeHeader(props: RecipeHeaderProps) {
   if (editMode) {
     return <h2>
       <TextField sx={{m: 1, width: "25ch"}} value={name} label="Name"
-                 onChange={(e) => setName(e.target.value)}/>
+                 onChange={(e) => {
+                   const newName = e.target.value
+                   if (newName !== name) {
+                     setName(newName)
+                   }
+                 }}/>
       <TextField label="Quantity" type="number" value={quantity}
                  inputRef={quantityRef}
                  sx={{m: 1, width: "5ch" }}
                  onChange={(e) => {
-                   setQuantity(Number(e.target.value))
+                   const newQuantity = Number(e.target.value)
+                   if (newQuantity !== quantity) {
+                     setQuantity(Number(e.target.value))
+                   }
                  }}
       />
       <ButtonGroup variant="outlined">
@@ -56,7 +64,7 @@ export default function RecipeHeader(props: RecipeHeaderProps) {
     </h2>
   } else {
     return <h2>
-      <span>{nameOrFallback}</span> <Chip data-testid="recipe-quantity" label={props.quantity}/>
+      <span data-testid="recipe-name">{nameOrFallback}</span> <Chip data-testid="recipe-quantity" label={props.quantity}/>
         <IconButton aria-label="edit recipe header" onClick={() => setEditMode(true)}>
           <Edit/>
         </IconButton>
