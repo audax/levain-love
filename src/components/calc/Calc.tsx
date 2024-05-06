@@ -7,6 +7,7 @@ import { useCalcVM } from "./vm";
 import { CalcProps } from "./types";
 import RecipePropertiesDisplay from "./RecipePropertyDisplay";
 import SectionBuilder from "./sections/SectionBuilder";
+import RecipeDescription from "./RecipeDescription";
 
 export default function Calc(props: Readonly<CalcProps>) {
   const vm = useCalcVM(props)
@@ -26,6 +27,10 @@ export default function Calc(props: Readonly<CalcProps>) {
       <Button disabled={!vm.modified} onClick={vm.save}>Save recipe</Button>
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>
+      <RecipeDescription
+          description={vm.recipe.description}
+          updateDescription={vm.updateDescription}
+      />
       <RecipePropertiesDisplay properties={vm.properties} />
       <Accordion>
           <AccordionSummary>Export, Import, Loading</AccordionSummary>

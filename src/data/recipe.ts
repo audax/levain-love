@@ -34,6 +34,7 @@ export interface Recipe {
   title: string
   quantity: number
   sections: Section[]
+  description: string
 }
 
 export interface RecipeProperties {
@@ -55,7 +56,8 @@ export const emptyRecipe: Recipe = {
       ingredients: [],
       key: 'default'
     }
-  ]
+  ],
+  description: ''
 }
 
 
