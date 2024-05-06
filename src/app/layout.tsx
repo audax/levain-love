@@ -3,9 +3,12 @@ import ThemeRegistry from '@/components/Theme/ThemeRegistry/ThemeRegistry';
 import { Metadata } from 'next'
 
 
-export const metadata: Metadata= {
-  title: 'Levain Love',
-  description: 'Love your levain, bake good bread',
+export const metadata: Metadata = {
+    title: {
+        template: '%s | Levain Love',
+        default: 'New Recipe | Levain Love',
+    },
+    applicationName: 'Levain Love',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -7,6 +7,8 @@ export async function generateMetadata({params}: { params: { id: string } }): Pr
     const recipe = await loadRecipe(params.id)
     return {
         title: recipe.title,
+        description: recipe.description,
+        applicationName: 'Levain Love',
     }
 }
 
