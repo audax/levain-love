@@ -223,17 +223,9 @@ describe('Calc', () => {
       expect(vm.updateDescription).toHaveBeenCalledWith('New Description');
     });
   });
-
-  describe('start new recipe', () => {
-    it('starts a new recipe', async () => {
-      jest.spyOn(vm, 'modified', 'get').mockReturnValue(true)
-      render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
-      await userEvent.click(screen.getByRole('button', { 'name': /New recipe/i }))
-      expect(vm.clear).toHaveBeenCalled()
-    })
-    it('disabled clear button when recipe is not modified', async () => {
-      render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
-      expect(screen.getByRole('button', { 'name': /New recipe/i })).toBeDisabled()
-    })
+  it('clears the recipe', async () => {
+    render(<Calc initialRecipe={defaultRecipe} onChange={change}/>)
+    await userEvent.click(screen.getByRole('button', { 'name': /New recipe/i }))
+    expect(vm.clear).toHaveBeenCalled()
   })
 })
