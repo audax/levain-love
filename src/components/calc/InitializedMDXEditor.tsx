@@ -10,9 +10,18 @@ import {
     markdownShortcutPlugin,
     MDXEditor,
     type MDXEditorMethods,
-    type MDXEditorProps, tablePlugin, toolbarPlugin, InsertTable, UndoRedo, BoldItalicUnderlineToggles, diffSourcePlugin, DiffSourceToggleWrapper, CreateLink, ListsToggle, BlockTypeSelect
+    type MDXEditorProps,
+    tablePlugin,
+    toolbarPlugin,
+    InsertTable,
+    UndoRedo,
+    BoldItalicUnderlineToggles,
+    diffSourcePlugin,
+    DiffSourceToggleWrapper,
+    CreateLink,
+    ListsToggle,
+    BlockTypeSelect
 } from '@mdxeditor/editor'
-import {ButtonGroup, Stack} from "@mui/material";
 
 // Only import this to the next file
 export default function InitializedMDXEditor({
@@ -22,6 +31,7 @@ export default function InitializedMDXEditor({
                                              }: { editorRef: ForwardedRef<MDXEditorMethods> | null } & MDXEditorProps & { originalText: string }) {
     return (
         <MDXEditor
+            placeholder="Enter your recipe description here"
             plugins={[
                 diffSourcePlugin({ diffMarkdown: originalText, viewMode: 'rich-text' }),
                 headingsPlugin(),

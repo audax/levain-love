@@ -49,6 +49,7 @@ describe('RecipeDescription', () => {
           expect(screen.getByText('Test Description')).toBeInTheDocument();
       });
 
+
       it('enters edit mode when the edit button is clicked', async () => {
           await userEvent.click(screen.getByLabelText('edit description'));
 
@@ -73,4 +74,13 @@ describe('RecipeDescription', () => {
           expect(screen.getByText('Test Description')).toBeInTheDocument();
       });
   });
+    describe('validation', () => {
+
+        it('warns if the description is too long', () => {
+            const chars = 1000001
+            const description = 'a'.repeat(chars);
+            render(<RecipeDescription description={description} updateDescription={mockUpdate}/>);
+            expect(screen.getByText('Description is too long and will be shortened to 100.000 characters from currently '+chars+' characters.')).toBeInTheDocument();
+        });
+    });
 });

@@ -1,6 +1,6 @@
 'use client'
 import React, {useState, useEffect, Suspense} from 'react';
-import {Card, CardActions, CardContent, IconButton, Tooltip} from "@mui/material";
+import {Alert, Card, CardActions, CardContent, IconButton, Tooltip} from "@mui/material";
 import { Edit, Save, Cancel } from "@mui/icons-material";
 import {Editor} from "./Editor"
 import Typography from "@mui/material/Typography";
@@ -17,6 +17,12 @@ export interface RecipeDescriptionProps {
 export default function RecipeDescription(props: RecipeDescriptionProps) {
   const [editMode, setEditMode] = useState(false);
   const [description, setDescription] = useState('');
+
+  const descriptionTooLong = (description.length >= 100000) ?
+      <Alert severity="warning">
+          Description is too long and will be shortened to 100.000 characters from currently {description.length} characters.
+      </Alert> : <></>
+
 
   useEffect(() => {
       if (props.description !== undefined) {
@@ -38,12 +44,13 @@ export default function RecipeDescription(props: RecipeDescriptionProps) {
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     Description
                 </Typography>
+          {descriptionTooLong}
           <Suspense fallback={<div>Loading...</div>}>
-        <Editor
-          originalText={props.description}
-          markdown={description}
-          onChange={setDescription}
-        />
+            <Editor
+              originalText={props.description}
+              markdown={description}
+              onChange={setDescription}
+            />
           </Suspense>
             </CardContent>
 
@@ -70,6 +77,7 @@ export default function RecipeDescription(props: RecipeDescriptionProps) {
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     Description
                 </Typography>
+            {descriptionTooLong}
             <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
             </CardContent>
             <CardActions>
