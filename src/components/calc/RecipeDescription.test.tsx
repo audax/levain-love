@@ -18,6 +18,22 @@ jest.mock('./Editor', () => {
     return { Editor }
 })
 
+jest.mock('react-markdown', () => {
+    return {
+        __esModule: true,
+        default: function Markdown(props: { children: string }) {
+            return <div>{props.children}</div>
+        }
+    }
+})
+
+jest.mock('remark-gfm', () => {
+    return {
+        __esModule: true,
+        default: () => {}
+    }
+})
+
 import RecipeDescription from "@/components/calc/RecipeDescription";
 
 describe('RecipeDescription', () => {
