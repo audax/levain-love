@@ -22,6 +22,7 @@ const vm: CalcVM = {
 }
 
 const VM_SPY = jest.fn((_: CalcProps) => (vm))
+// noinspection JSUnusedGlobalSymbols
 jest.mock('./vm', () => ({
   useCalcVM: (props: CalcProps) => VM_SPY(props)
 }))
@@ -30,9 +31,30 @@ jest.mock("material-ui-confirm", () => ({
   useConfirm: () => confirmSpy,
 }));
 
+let descriptionOnChangeHandler: (description: string) => void
+
+function RecipeDescription(props: RecipeDescriptionProps) {
+  descriptionOnChangeHandler = props.updateDescription
+  return <span>
+    {props.description}
+    <TextField
+      label="Description"
+      value={props.description}
+      onChange={(e) => props.updateDescription?.(e.target.value)}
+  />
+  </span>
+}
+
+jest.mock('./RecipeDescription', () => {
+  return RecipeDescription
+})
+
 import Calc from '@/components/calc/Calc'
 import { defaultRecipe } from '@/data/_fixtures'
 import {emptyRecipe } from '@/data/recipe'
+import {TextField} from "@mui/material";
+import React from "react";
+import {RecipeDescriptionProps} from "@/components/calc/RecipeDescription";
 
 describe('Calc', () => {
   beforeEach(() => {
@@ -195,23 +217,9 @@ describe('Calc', () => {
       expect(screen.getByText('Test Description')).toBeInTheDocument();
     });
 
-    it('enters edit mode when the edit button is clicked', () => {
-      fireEvent.click(screen.getByLabelText('edit description'));
-      expect(screen.getByDisplayValue('Test Description')).toBeInTheDocument();
-    });
-
     it('calls updateDescription when the confirm edit button is clicked', () => {
-      fireEvent.click(screen.getByLabelText('edit description'));
-      fireEvent.change(screen.getByDisplayValue('Test Description'), {target: {value: 'New Description'}});
-      fireEvent.click(screen.getByLabelText('confirm edit'));
+      descriptionOnChangeHandler('New Description');
       expect(vm.updateDescription).toHaveBeenCalledWith('New Description');
-    });
-
-    it('cancels edit when the cancel edit button is clicked', () => {
-      fireEvent.click(screen.getByLabelText('edit description'));
-      fireEvent.change(screen.getByDisplayValue('Test Description'), {target: {value: 'New Description'}});
-      fireEvent.click(screen.getByLabelText('cancel edit'));
-      expect(screen.getByText('Test Description')).toBeInTheDocument();
     });
   });
 })

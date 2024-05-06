@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
-import { TextField, IconButton, Tooltip } from "@mui/material";
+'use client'
+import React, {useState, useEffect, Suspense} from 'react';
+import { IconButton, Tooltip } from "@mui/material";
 import { Edit, Save, Cancel } from "@mui/icons-material";
+import {Editor} from "./Editor"
 
-interface RecipeDescriptionProps {
+
+export interface RecipeDescriptionProps {
   readonly description: string;
   readonly updateDescription: (description: string) => void;
 }
@@ -27,10 +30,13 @@ export default function RecipeDescription(props: RecipeDescriptionProps) {
   if (editMode) {
     return (
       <div>
-        <TextField
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          <Suspense fallback={<div>Loading...</div>}>
+        <Editor
+          originalText={props.description}
+          markdown={description}
+          onChange={setDescription}
         />
+          </Suspense>
         <Tooltip title="Confirm edit">
           <IconButton aria-label="confirm edit" onClick={confirmEdit}>
             <Save/>
