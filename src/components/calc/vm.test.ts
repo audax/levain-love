@@ -14,6 +14,11 @@ jest.mock("../../db/recipeDb", () => ({
   saveRecipe: jest.fn(() => Promise.resolve("test"))
 }))
 
+const confirmSpy = jest.fn(() => Promise.resolve());
+jest.mock("material-ui-confirm", () => ({
+  useConfirm: () => confirmSpy,
+}));
+
 import { useCalcVM } from "./vm";
 import { SectionType, emptyRecipe } from "@/data/recipe";
 import { act } from "react-dom/test-utils";
@@ -140,6 +145,15 @@ describe("calc vm", () => {
     })
     expect(result.current.modified).toBe(true)
 
+  })
+  it('requires confirmation to clear', async () => {
+    const {result} = renderHook(() => useCalcVM({ initialRecipe: emptyRecipe, onChange: () => {} }))
+    await act(async () => {
+      await result.current.clear()
+    })
+    expect(confirmSpy).toHaveBeenCalled()
+    expect(pushMock).toHaveBeenCalledWith('/')
+    expect(result.current.recipe).toEqual(emptyRecipe)
   })
 
 });

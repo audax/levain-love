@@ -25,6 +25,7 @@ export default function Calc(props: Readonly<CalcProps>) {
                     onUpdate={vm.updateTitleAndQuantity}
                     scaleQuantity={vm.scaleQuantity}/>
       <Button disabled={!vm.modified} onClick={vm.save}>Save recipe</Button>
+      <Button disabled={!vm.modified} onClick={vm.clear}>New recipe</Button>
       <Stack>{sections}</Stack>
       <Button onClick={vm.addSection}>Add Section</Button>
       <RecipeDescription

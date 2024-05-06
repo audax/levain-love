@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Recipe, Section, SectionType } from "@/data/recipe";
+import {emptyRecipe, Recipe, Section, SectionType} from "@/data/recipe";
 import { CalcProps, CalcVM } from "./types";
 import {calculateRecipeProperties, scaleRecipeByFactor, scaleRecipeByQuantity} from "@/data/calculate";
 import { v4 as uuidv4 } from 'uuid';
@@ -7,6 +7,7 @@ import { importRecipe } from "@/data/import";
 import {load} from "@/data/persistence";
 import {useRouter} from "next/navigation";
 import {saveRecipe} from "@/db/recipeDb";
+import {useConfirm} from "material-ui-confirm";
 
 function buildSection(): Section {
   return {
@@ -19,6 +20,7 @@ function buildSection(): Section {
 
 export function useCalcVM(props: Readonly<CalcProps>): CalcVM {
   const { initialRecipe, onChange } = props;
+  const confirm = useConfirm()
   const [recipe, setRecipe] = useState(initialRecipe);
   const router = useRouter()
   const [modified, setModified] = useState(false)
@@ -40,9 +42,16 @@ export function useCalcVM(props: Readonly<CalcProps>): CalcVM {
     const id = await saveRecipe(recipe)
     router.push(`/recipe/${id}`)
   }
+  const clear = () => confirm({ title: 'Clear recipe?', description: 'Are you sure you want to clear the recipe?' })
+      .then(() => {
+        setRecipe(emptyRecipe)
+        router.push('/')
+      })
+
   return {
     recipe,
     save,
+    clear,
     scaleQuantity,
     scaleByFactor,
     modified,

@@ -19,4 +19,5 @@ export interface CalcVM {
   readonly recipe: Recipe;
   readonly properties: RecipeProperties
   readonly modified: boolean
+  clear(): Promise<void>
 }
