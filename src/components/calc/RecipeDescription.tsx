@@ -4,6 +4,9 @@ import {Card, CardActions, CardContent, IconButton, Tooltip} from "@mui/material
 import { Edit, Save, Cancel } from "@mui/icons-material";
 import {Editor} from "./Editor"
 import Typography from "@mui/material/Typography";
+import Markdown from "react-markdown";
+import remarkGfm from 'remark-gfm'
+
 
 
 export interface RecipeDescriptionProps {
@@ -67,7 +70,7 @@ export default function RecipeDescription(props: RecipeDescriptionProps) {
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     Description
                 </Typography>
-        <p>{description}</p>
+            <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
             </CardContent>
             <CardActions>
         <IconButton aria-label="edit description" onClick={() => setEditMode(true)}>
