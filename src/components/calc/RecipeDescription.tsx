@@ -1,8 +1,9 @@
 'use client'
 import React, {useState, useEffect, Suspense} from 'react';
-import { IconButton, Tooltip } from "@mui/material";
+import {Card, CardActions, CardContent, IconButton, Tooltip} from "@mui/material";
 import { Edit, Save, Cancel } from "@mui/icons-material";
 import {Editor} from "./Editor"
+import Typography from "@mui/material/Typography";
 
 
 export interface RecipeDescriptionProps {
@@ -29,7 +30,11 @@ export default function RecipeDescription(props: RecipeDescriptionProps) {
 
   if (editMode) {
     return (
-      <div>
+        <Card variant="outlined">
+            <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Description
+                </Typography>
           <Suspense fallback={<div>Loading...</div>}>
         <Editor
           originalText={props.description}
@@ -37,6 +42,9 @@ export default function RecipeDescription(props: RecipeDescriptionProps) {
           onChange={setDescription}
         />
           </Suspense>
+            </CardContent>
+
+            <CardActions>
         <Tooltip title="Confirm edit">
           <IconButton aria-label="confirm edit" onClick={confirmEdit}>
             <Save/>
@@ -49,17 +57,23 @@ export default function RecipeDescription(props: RecipeDescriptionProps) {
           }>
             <Cancel/>
           </IconButton>
-        </Tooltip>
-      </div>
+        </Tooltip></CardActions>
+      </Card>
     );
   } else {
     return (
-      <div>
+        <Card variant="outlined">
+            <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Description
+                </Typography>
         <p>{description}</p>
+            </CardContent>
+            <CardActions>
         <IconButton aria-label="edit description" onClick={() => setEditMode(true)}>
           <Edit/>
-        </IconButton>
-      </div>
+        </IconButton></CardActions>
+      </Card>
     );
   }
 }
